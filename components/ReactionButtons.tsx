@@ -50,33 +50,26 @@ export default function ReactionButtons({
 
     setLoading(true)
     try {
-      // Check if user already reacted with this type
-      const hasReacted = userReactions.includes(type)
+      // Toggle reaction via POST (API handles add/remove logic)
+      const res = await fetch('/api/reactions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ postId, type }),
+      })
 
-      if (hasReacted) {
-        // Remove reaction
-        const reactionId = reactions.find(
-          (r) => r.user.id === session.user.id && r.type === type
-        )?.id
-
-        const res = await fetch(`/api/reactions/${reactionId}`, {
-          method: 'DELETE',
-        })
-
-        if (res.ok) {
-          setReactions(reactions.filter((r) => r.id !== reactionId))
-        }
-      } else {
-        // Add reaction
-        const res = await fetch('/api/reactions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ postId, type }),
-        })
-
-        if (res.ok) {
-          const newReaction = await res.json()
-          setReactions([...reactions, newReaction])
+      if (res.ok) {
+        const data = await res.json()
+        // Refresh reactions from server
+        if (data.success && data.data) {
+          const { reaction, action } = data.data
+          
+          if (action === 'removed') {
+            // Remove the reaction from state
+            setReactions(reactions.filter((r) => r.id !== reaction.id))
+          } else {
+            // Add the new reaction to state
+            setReactions([...reactions, reaction])
+          }
         }
       }
     } catch (error) {
