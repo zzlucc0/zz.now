@@ -35,7 +35,7 @@ export async function uploadFile(
   fileName: string,
   contentType: string
 ): Promise<string> {
-  await minioClient.putObject(BUCKET_NAME, fileName, file, {
+  await minioClient.putObject(BUCKET_NAME, fileName, file, file.length, {
     'Content-Type': contentType,
   })
   

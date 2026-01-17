@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
       resource: 'comment',
       resourceId: comment.id,
       metadata: { postId: validated.postId, parentId: validated.parentId },
-      ipAddress: request.ip,
+      ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined,
       userAgent: request.headers.get('user-agent') || undefined,
     })
 

@@ -6,11 +6,12 @@ import { createAuditLog } from '@/lib/utils/audit'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const { slug } = await params
     const post = await prisma.post.findUnique({
-      where: { slug: params.slug },
+      where: { slug },
       include: {
         author: {
           select: {
@@ -80,7 +81,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const session = await auth()
@@ -88,8 +89,9 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { slug } = await params
     const post = await prisma.post.findUnique({
-      where: { slug: params.slug },
+      where: { slug },
     })
 
     if (!post) {
@@ -103,10 +105,12 @@ export async function PATCH(
     const body = await request.json()
     const validated = updatePostSchema.parse(body)
 
+    const { tags, ...postData } = validated
+
     const updatedPost = await prisma.post.update({
-      where: { slug: params.slug },
+      where: { slug },
       data: {
-        ...validated,
+        ...postData,
         publishedAt:
           validated.status === 'PUBLISHED' && !post.publishedAt
             ? new Date()
@@ -131,7 +135,7 @@ export async function PATCH(
       resource: 'post',
       resourceId: post.id,
       metadata: { changes: validated },
-      ipAddress: request.ip,
+      ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined,
       userAgent: request.headers.get('user-agent') || undefined,
     })
 
@@ -154,7 +158,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const session = await auth()
@@ -162,8 +166,9 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { slug } = await params
     const post = await prisma.post.findUnique({
-      where: { slug: params.slug },
+      where: { slug },
     })
 
     if (!post) {
@@ -175,7 +180,7 @@ export async function DELETE(
     }
 
     await prisma.post.delete({
-      where: { slug: params.slug },
+      where: { slug },
     })
 
     await createAuditLog({
@@ -184,7 +189,7 @@ export async function DELETE(
       resource: 'post',
       resourceId: post.id,
       metadata: { title: post.title },
-      ipAddress: request.ip,
+      ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined,
       userAgent: request.headers.get('user-agent') || undefined,
     })
 

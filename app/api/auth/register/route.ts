@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
       action: 'USER_REGISTERED',
       resource: 'user',
       resourceId: user.id,
-      ipAddress: request.ip,
+      ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined,
       userAgent: request.headers.get('user-agent') || undefined,
     })
 

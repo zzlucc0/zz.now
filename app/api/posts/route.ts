@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
       resource: 'post',
       resourceId: post.id,
       metadata: { title: post.title, status: post.status },
-      ipAddress: request.ip,
+      ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined,
       userAgent: request.headers.get('user-agent') || undefined,
     })
 
