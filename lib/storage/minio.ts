@@ -50,4 +50,55 @@ export async function deleteFile(fileName: string): Promise<void> {
   await minioClient.removeObject(BUCKET_NAME, fileName)
 }
 
+/**
+ * Generate presigned URL for file upload
+ */
+export async function getPresignedUploadUrl(
+  objectKey: string,
+  expirySeconds = 3600
+): Promise<string> {
+  return await minioClient.presignedPutObject(
+    BUCKET_NAME,
+    objectKey,
+    expirySeconds
+  )
+}
+
+/**
+ * Generate presigned URL for file download
+ */
+export async function getPresignedDownloadUrl(
+  objectKey: string,
+  expirySeconds = 3600
+): Promise<string> {
+  return await minioClient.presignedGetObject(
+    BUCKET_NAME,
+    objectKey,
+    expirySeconds
+  )
+}
+
+/**
+ * Get public URL for an object (if bucket is public)
+ */
+export function getPublicUrl(objectKey: string): string {
+  const endpoint = process.env.MINIO_ENDPOINT || 'localhost'
+  const port = process.env.MINIO_PORT || '9000'
+  const protocol = process.env.MINIO_USE_SSL === 'true' ? 'https' : 'http'
+  
+  return `${protocol}://${endpoint}:${port}/${BUCKET_NAME}/${objectKey}`
+}
+
+/**
+ * Check if object exists
+ */
+export async function objectExists(objectKey: string): Promise<boolean> {
+  try {
+    await minioClient.statObject(BUCKET_NAME, objectKey)
+    return true
+  } catch {
+    return false
+  }
+}
+
 export { minioClient }

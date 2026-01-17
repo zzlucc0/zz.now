@@ -54,11 +54,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null
         }
 
+        // Check if user should be promoted to ADMIN based on ADMIN_EMAILS
+        const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim().toLowerCase()) || []
+        const shouldBeAdmin = adminEmails.includes(user.email.toLowerCase())
+        
+        // Auto-promote to ADMIN if email matches and not already ADMIN
+        if (shouldBeAdmin && user.role !== 'ADMIN') {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { role: 'ADMIN' },
+          })
+        }
+
         return {
           id: user.id,
           email: user.email,
           name: user.displayName || user.username,
-          role: user.role,
+          role: shouldBeAdmin ? 'ADMIN' : user.role,
           username: user.username,
         }
       },
