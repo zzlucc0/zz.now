@@ -128,14 +128,20 @@ export default function NewPostPage() {
         }),
       })
 
+      const data = await res.json()
+
       if (!res.ok) {
-        const error = await res.json()
-        throw new Error(error.error || 'Failed to create post')
+        throw new Error(data.error?.message || data.error || 'Failed to create post')
       }
 
-      const { post } = await res.json()
+      const post = data.data?.post || data.post
+      if (!post) {
+        throw new Error('Post created but no data returned')
+      }
+
       router.push(`/posts/${post.slug}`)
     } catch (error) {
+      console.error('Create post error:', error)
       alert(error instanceof Error ? error.message : 'Failed to create post')
     } finally {
       setLoading(false)

@@ -10,14 +10,20 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
-    const status = searchParams.get('status') || 'PUBLISHED'
+    const status = searchParams.get('status')
     const tag = searchParams.get('tag')
 
     const skip = (page - 1) * limit
 
     const where: any = {
-      status,
       visibility: 'PUBLIC',
+    }
+
+    // Only filter by status if explicitly provided
+    if (status) {
+      where.status = status
+    } else {
+      where.status = 'PUBLISHED' // Default to published for public listing
     }
 
     if (tag) {
@@ -56,18 +62,29 @@ export async function GET(request: NextRequest) {
     ])
 
     return NextResponse.json({
-      posts,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
+      success: true,
+      data: {
+        posts,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages: Math.ceil(total / limit),
+        },
       },
+      error: null,
     })
   } catch (error) {
     console.error('Get posts error:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        success: false,
+        data: null,
+        error: {
+          code: 'INTERNAL_ERROR',
+          message: 'Failed to fetch posts',
+        },
+      },
       { status: 500 }
     )
   }
@@ -138,18 +155,37 @@ export async function POST(request: NextRequest) {
       userAgent: request.headers.get('user-agent') || undefined,
     })
 
-    return NextResponse.json({ post }, { status: 201 })
+    return NextResponse.json({
+      success: true,
+      data: { post },
+      error: null,
+    }, { status: 201 })
   } catch (error) {
     if (error instanceof Error && error.name === 'ZodError') {
       return NextResponse.json(
-        { error: 'Invalid input', details: error },
+        {
+          success: false,
+          data: null,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Invalid input',
+            details: error,
+          },
+        },
         { status: 400 }
       )
     }
 
     console.error('Create post error:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        success: false,
+        data: null,
+        error: {
+          code: 'INTERNAL_ERROR',
+          message: 'Failed to create post',
+        },
+      },
       { status: 500 }
     )
   }
