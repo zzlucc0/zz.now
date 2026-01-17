@@ -26,7 +26,7 @@ model User {
   comments      Comment[]
   reactions     Reaction[]
   auditLogs     AuditLog[]
-  customEmojis  CustomEmoji[]
+  emojis        CustomEmoji[]
 }
 
 model Account {
@@ -77,10 +77,32 @@ model Post {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
-  author      User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author      User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
   comments    Comment[]
   reactions   Reaction[]
   tags        Tag[]
+  media       PostMedia[]
+
+  @@index([authorId])
+  @@index([createdAt])
+  @@index([status, visibility])
+}
+
+model PostMedia {
+  id         String   @id @default(cuid())
+  postId     String
+  type       MediaType
+  objectKey  String?
+  embedUrl   String?
+  width      Int?
+  height     Int?
+  size       Int?
+  mimeType   String?
+  createdAt  DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
 }
 
 model Comment {
@@ -97,6 +119,10 @@ model Comment {
   parent    Comment?   @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies   Comment[]  @relation("CommentReplies")
   reactions Reaction[]
+
+  @@index([postId])
+  @@index([authorId])
+  @@index([createdAt])
 }
 
 model Reaction {
@@ -126,13 +152,18 @@ model Tag {
 
 model CustomEmoji {
   id        String   @id @default(cuid())
-  name      String   @unique
-  imageUrl  String
-  creatorId String
+  name      String
+  objectKey String   @unique
+  keywords  String?
+  ownerId   String
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@unique([ownerId, name])
+  @@index([ownerId])
 }
 
 model AuditLog {
@@ -177,4 +208,10 @@ enum ReactionType {
   LAUGH
   THINKING
   CUSTOM
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO_EMBED
+  VIDEO_FILE
 }
