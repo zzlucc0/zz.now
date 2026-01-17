@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { auth } from "@/lib/auth/config";
 import { Navigation } from "@/components/Navigation";
+import { SessionProvider } from "@/components/SessionProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,10 +32,12 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navigation session={session} />
-        <main className="min-h-screen">
-          {children}
-        </main>
+        <SessionProvider session={session}>
+          <Navigation session={session} />
+          <main className="min-h-screen">
+            {children}
+          </main>
+        </SessionProvider>
       </body>
     </html>
   );

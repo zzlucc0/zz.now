@@ -7,7 +7,7 @@ import CommentSection from '@/components/CommentSection'
 import ReactionButtons from '@/components/ReactionButtons'
 
 interface PageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 async function getPost(slug: string) {
@@ -63,7 +63,8 @@ async function getPost(slug: string) {
 
 export default async function PostDetailPage({ params }: PageProps) {
   const session = await auth()
-  const post = await getPost(params.slug)
+  const { slug } = await params
+  const post = await getPost(slug)
 
   // Check visibility permissions
   if (post.visibility === 'PRIVATE' && post.authorId !== session?.user?.id) {
@@ -158,7 +159,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                       if (
                         confirm('Are you sure you want to delete this post?')
                       ) {
-                        const res = await fetch(`/api/posts/${params.slug}`, {
+                        const res = await fetch(`/api/posts/${post.slug}`, {
                           method: 'DELETE',
                         })
                         if (res.ok) {

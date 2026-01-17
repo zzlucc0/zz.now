@@ -4,7 +4,7 @@ import { prisma } from '@/lib/db/prisma'
 import { auth } from '@/lib/auth/config'
 
 interface PageProps {
-  params: { username: string }
+  params: Promise<{ username: string }>
 }
 
 async function getUserProfile(username: string) {
@@ -67,7 +67,8 @@ async function getUserProfile(username: string) {
 
 export default async function UserProfilePage({ params }: PageProps) {
   const session = await auth()
-  const data = await getUserProfile(params.username)
+  const { username } = await params
+  const data = await getUserProfile(username)
 
   if (!data) {
     notFound()
