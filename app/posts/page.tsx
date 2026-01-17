@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
-import prisma from '@/lib/db/prisma'
+import { prisma } from '@/lib/db/prisma'
 import type { PostStatus, Visibility } from '@prisma/client'
 
 interface SearchParams {

@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import prisma from '@/lib/db/prisma'
+import { prisma } from '@/lib/db/prisma'
 import { auth } from '@/lib/auth/config'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import CommentSection from '@/components/CommentSection'

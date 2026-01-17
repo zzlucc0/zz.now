@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@/lib/auth/config'
-import prisma from '@/lib/db/prisma'
+import { prisma } from '@/lib/db/prisma'
 
 async function getModerationData() {
   const [posts, comments, users] = await Promise.all([
