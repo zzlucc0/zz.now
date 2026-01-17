@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
           error: {
             code: "VALIDATION_ERROR",
             message: "Invalid tag data",
-            details: error.errors,
+            details: error.issues,
           },
         },
         { status: 400 }
