@@ -9,7 +9,7 @@ const updateCommentSchema = z.object({
   content: z.string().min(1).max(2000),
 })
 
-// PATCH /api/comments/[id] - Update comment
+// PATCH /api/comments/[id] - Update comments
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
