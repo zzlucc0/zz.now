@@ -9,9 +9,16 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
+    "@prisma/client": "^7.2.0",
+    "argon2": "^0.44.0",
+    "minio": "^8.0.6",
     "next": "16.1.3",
+    "next-auth": "^5.0.0-beta.30",
+    "prisma": "^7.2.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
