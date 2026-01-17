@@ -27,18 +27,24 @@ export async function POST(request: NextRequest) {
 
     const passwordHash = await hashPassword(validated.password)
 
+    // Check if user should be ADMIN based on ADMIN_EMAILS
+    const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim().toLowerCase()) || []
+    const isAdmin = adminEmails.includes(validated.email.toLowerCase())
+
     const user = await prisma.user.create({
       data: {
         username: validated.username,
         email: validated.email,
         passwordHash,
         displayName: validated.displayName,
+        role: isAdmin ? 'ADMIN' : 'USER',
       },
       select: {
         id: true,
         username: true,
         email: true,
         displayName: true,
+        role: true,
         createdAt: true,
       },
     })
