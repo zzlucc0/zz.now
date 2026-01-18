@@ -5,6 +5,7 @@ import { auth } from '@/lib/auth/config'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import CommentSection from '@/components/CommentSection'
 import ReactionButtons from '@/components/ReactionButtons'
+import { DeletePostButton } from '@/components/DeletePostButton'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -153,23 +154,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                   </Link>
                 )}
                 {(isAuthor || isAdmin) && (
-                  <button
-                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                    onClick={async () => {
-                      if (
-                        confirm('Are you sure you want to delete this post?')
-                      ) {
-                        const res = await fetch(`/api/posts/${post.slug}`, {
-                          method: 'DELETE',
-                        })
-                        if (res.ok) {
-                          window.location.href = '/posts'
-                        }
-                      }
-                    }}
-                  >
-                    Delete
-                  </button>
+                  <DeletePostButton postSlug={post.slug} />
                 )}
               </div>
             )}

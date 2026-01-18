@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@/lib/auth/config'
 import { prisma } from '@/lib/db/prisma'
+import { DeleteAdminPostButton } from '@/components/DeleteAdminPostButton'
+import { DeleteCommentButton } from '@/components/DeleteCommentButton'
 
 async function getModerationData() {
   const [posts, comments, users] = await Promise.all([
@@ -155,27 +157,10 @@ export default async function AdminModerationPage() {
                     💬 {post._count.comments} • ❤️ {post._count.reactions}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button
-                      onClick={async () => {
-                        if (
-                          confirm(
-                            `Delete post "${post.title}"? This cannot be undone.`
-                          )
-                        ) {
-                          const res = await fetch(`/api/admin/posts/${post.id}`, {
-                            method: 'DELETE',
-                          })
-                          if (res.ok) {
-                            window.location.reload()
-                          } else {
-                            alert('Failed to delete post')
-                          }
-                        }
-                      }}
-                      className="text-red-600 hover:underline text-sm"
-                    >
-                      Delete
-                    </button>
+                    <DeleteAdminPostButton 
+                      postId={post.id}
+                      postTitle={post.title}
+                    />
                   </td>
                 </tr>
               ))}
@@ -223,28 +208,7 @@ export default async function AdminModerationPage() {
                     </Link>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button
-                      onClick={async () => {
-                        if (
-                          confirm('Delete this comment? This cannot be undone.')
-                        ) {
-                          const res = await fetch(
-                            `/api/admin/comments/${comment.id}`,
-                            {
-                              method: 'DELETE',
-                            }
-                          )
-                          if (res.ok) {
-                            window.location.reload()
-                          } else {
-                            alert('Failed to delete comment')
-                          }
-                        }
-                      }}
-                      className="text-red-600 hover:underline text-sm"
-                    >
-                      Delete
-                    </button>
+                    <DeleteCommentButton commentId={comment.id} />
                   </td>
                 </tr>
               ))}

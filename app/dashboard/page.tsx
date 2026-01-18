@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@/lib/auth/config'
 import { prisma } from '@/lib/db/prisma'
+import { DeletePostButton } from '@/components/DeletePostButton'
 
 async function getUserData(userId: string) {
   const [user, posts, comments] = await Promise.all([
@@ -240,25 +241,12 @@ export default async function DashboardPage() {
                         >
                           Edit
                         </Link>
-                        <button
-                          onClick={async () => {
-                            if (
-                              confirm(
-                                'Are you sure you want to delete this post?'
-                              )
-                            ) {
-                              const res = await fetch(`/api/posts/${post.slug}`, {
-                                method: 'DELETE',
-                              })
-                              if (res.ok) {
-                                window.location.reload()
-                              }
-                            }
-                          }}
-                          className="text-red-600 hover:underline text-sm"
-                        >
-                          Delete
-                        </button>
+                        <DeletePostButton 
+                          postSlug={post.slug}
+                          variant="link"
+                          className="text-red-600 hover:underline text-sm p-0 h-auto"
+                          onSuccess={() => window.location.reload()}
+                        />
                       </div>
                     </td>
                   </tr>
