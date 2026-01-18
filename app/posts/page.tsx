@@ -90,113 +90,103 @@ export default async function PostsPage({
   searchParams: SearchParams
 }) {
   const { posts, page, totalPages, tags } = await getPosts(searchParams)
+  const selectedTag = searchParams.tag
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">Blog Posts</h1>
-        <p className="text-gray-600">
-          Thoughts, tutorials, and insights on software development
-        </p>
+    <div className="posts-page">
+      {/* Header */}
+      <div className="posts-header">
+        <h1 className="posts-title">Posts</h1>
+        <p className="posts-subtitle">Thoughts and writings</p>
       </div>
 
-      {/* Filters */}
-      <div className="mb-8 flex flex-wrap gap-4">
-        <div className="flex-1 min-w-[200px]">
-          <label className="block text-sm font-medium mb-2">Filter by Tag</label>
-          <select
-            className="w-full px-4 py-2 border rounded-lg"
-            value={searchParams.tag || ''}
-            onChange={(e) => {
-              const url = new URL(window.location.href)
-              if (e.target.value) {
-                url.searchParams.set('tag', e.target.value)
-              } else {
-                url.searchParams.delete('tag')
-              }
-              url.searchParams.delete('page')
-              window.location.href = url.toString()
-            }}
-          >
-            <option value="">All Tags</option>
-            {tags.map((tag) => (
-              <option key={tag.id} value={tag.slug}>
-                {tag.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex items-end">
-          <Link
-            href="/editor/new"
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            Write Post
-          </Link>
-        </div>
-      </div>
-
-      {/* Tag Pills */}
+      {/* Tags Filter */}
       {tags.length > 0 && (
-        <div className="mb-8">
-          <div className="flex flex-wrap gap-2">
+        <div className="posts-tags">
+          <Link
+            href="/posts"
+            className={`posts-tag ${!selectedTag ? 'posts-tag-active' : ''}`}
+          >
+            All
+          </Link>
+          {tags.map((tag) => (
             <Link
-              href="/posts"
-              className={`px-3 py-1 rounded-full text-sm ${
-                !searchParams.tag
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 hover:bg-gray-300'
-              }`}
+              key={tag.id}
+              href={`/posts?tag=${tag.slug}`}
+              className={`posts-tag ${selectedTag === tag.slug ? 'posts-tag-active' : ''}`}
             >
-              All
+              {tag.name}
             </Link>
-            {tags.map((tag) => (
-              <Link
-                key={tag.id}
-                href={`/posts?tag=${tag.slug}`}
-                className={`px-3 py-1 rounded-full text-sm ${
-                  searchParams.tag === tag.slug
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 hover:bg-gray-300'
-                }`}
-              >
-                {tag.name}
-              </Link>
-            ))}
-          </div>
+          ))}
         </div>
       )}
 
-      {/* Posts Grid */}
+      {/* Posts Feed */}
       {posts.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">No posts found</p>
-          <Link
-            href="/editor/new"
-            className="inline-block mt-4 text-blue-600 hover:underline"
-          >
-            Write the first post
-          </Link>
+        <div className="posts-empty">
+          <p>No posts yet</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {posts.map((post) => (
+        <div className="posts-feed">
+          {posts.map((post, index) => (
             <article
               key={post.id}
-              className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+              className="post-card fade-in"
+              style={{ animationDelay: `${index * 50}ms` }}
             >
-              <Link href={`/posts/${post.slug}`}>
-                <div className="p-6">
-                  <h2 className="text-xl font-bold mb-2 hover:text-blue-600">
-                    {post.title}
-                  </h2>
+              <Link href={`/posts/${post.slug}`} className="post-card-link">
+                <div className="post-card-header">
+                  <h2 className="post-card-title">{post.title}</h2>
+                  <time className="post-card-date">
+                    {new Date(post.publishedAt!).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </time>
+                </div>
 
-                  {post.excerpt && (
-                    <p className="text-gray-600 mb-4 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                  )}
+                {post.excerpt && (
+                  <p className="post-card-excerpt">{post.excerpt}</p>
+                )}
+
+                {post.tags.length > 0 && (
+                  <div className="post-card-tags">
+                    {post.tags.map((tag) => (
+                      <span key={tag.id} className="post-card-tag">
+                        {tag.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                <div className="post-card-footer">
+                  <div className="post-card-author">
+                    {post.author.avatarUrl ? (
+                      <img src={post.author.avatarUrl} alt="" className="post-card-avatar" />
+                    ) : (
+                      <div className="post-card-avatar">
+                        {(post.author.username || 'U')[0].toUpperCase()}
+                      </div>
+                    )}
+                    <span className="post-card-author-name">
+                      {post.author.displayName || post.author.username}
+                    </span>
+                  </div>
+                  <div className="post-card-stats">
+                    {post._count.reactions > 0 && (
+                      <span className="post-card-stat">❤️ {post._count.reactions}</span>
+                    )}
+                    {post._count.comments > 0 && (
+                      <span className="post-card-stat">💬 {post._count.comments}</span>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            </article>
+          ))}
+        </div>
+      )}
 
                   <div className="flex items-center mb-4">
                     {post.author.avatarUrl ? (
@@ -241,7 +231,6 @@ export default async function PostsPage({
                     <span>💬 {post._count.comments}</span>
                     <span>❤️ {post._count.reactions}</span>
                   </div>
-                </div>
               </Link>
             </article>
           ))}
@@ -250,46 +239,47 @@ export default async function PostsPage({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center gap-2">
+        <div className="posts-pagination">
           {page > 1 && (
             <Link
-              href={`/posts?page=${page - 1}${
-                searchParams.tag ? `&tag=${searchParams.tag}` : ''
-              }`}
-              className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+              href={`/posts?page=${page - 1}${selectedTag ? `&tag=${selectedTag}` : ''}`}
+              className="posts-pagination-btn"
             >
-              Previous
+              ← Previous
             </Link>
           )}
 
-          <div className="flex gap-2">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-              (pageNum) => (
+          <div className="posts-pagination-pages">
+            {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
+              let pageNum
+              if (totalPages <= 7) {
+                pageNum = i + 1
+              } else if (page <= 4) {
+                pageNum = i + 1
+              } else if (page >= totalPages - 3) {
+                pageNum = totalPages - 6 + i
+              } else {
+                pageNum = page - 3 + i
+              }
+              
+              return (
                 <Link
                   key={pageNum}
-                  href={`/posts?page=${pageNum}${
-                    searchParams.tag ? `&tag=${searchParams.tag}` : ''
-                  }`}
-                  className={`px-4 py-2 border rounded-lg ${
-                    pageNum === page
-                      ? 'bg-blue-600 text-white'
-                      : 'hover:bg-gray-50'
-                  }`}
+                  href={`/posts?page=${pageNum}${selectedTag ? `&tag=${selectedTag}` : ''}`}
+                  className={`posts-pagination-num ${pageNum === page ? 'posts-pagination-num-active' : ''}`}
                 >
                   {pageNum}
                 </Link>
               )
-            )}
+            })}
           </div>
 
           {page < totalPages && (
             <Link
-              href={`/posts?page=${page + 1}${
-                searchParams.tag ? `&tag=${searchParams.tag}` : ''
-              }`}
-              className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+              href={`/posts?page=${page + 1}${selectedTag ? `&tag=${selectedTag}` : ''}`}
+              className="posts-pagination-btn"
             >
-              Next
+              Next →
             </Link>
           )}
         </div>
