@@ -188,55 +188,6 @@ export default async function PostsPage({
         </div>
       )}
 
-                  <div className="flex items-center mb-4">
-                    {post.author.avatarUrl ? (
-                      <img
-                        src={post.author.avatarUrl}
-                        alt={post.author.displayName || post.author.username}
-                        className="w-8 h-8 rounded-full mr-2"
-                      />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-gray-300 mr-2 flex items-center justify-center">
-                        <span className="text-sm font-bold">
-                          {(
-                            post.author.displayName || post.author.username
-                          )[0].toUpperCase()}
-                        </span>
-                      </div>
-                    )}
-                    <div>
-                      <p className="text-sm font-medium">
-                        {post.author.displayName || post.author.username}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {new Date(post.publishedAt!).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-
-                  {post.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {post.tags.map((tag) => (
-                        <span
-                          key={tag.id}
-                          className="px-2 py-1 bg-gray-100 text-xs rounded"
-                        >
-                          {tag.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="flex items-center text-sm text-gray-500 gap-4">
-                    <span>💬 {post._count.comments}</span>
-                    <span>❤️ {post._count.reactions}</span>
-                  </div>
-              </Link>
-            </article>
-          ))}
-        </div>
-      )}
-
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="posts-pagination">

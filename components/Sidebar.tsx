@@ -55,14 +55,14 @@ export function Sidebar({ session }: SidebarProps) {
             {session ? (
               <>
                 <div className="sidebar-avatar">
-                  {session.user.avatarUrl ? (
-                    <img src={session.user.avatarUrl} alt={session.user.username || ''} />
+                  {(session.user as any).avatarUrl ? (
+                    <img src={(session.user as any).avatarUrl} alt={session.user.username || ''} />
                   ) : (
                     <span>{(session.user.username || 'U')[0].toUpperCase()}</span>
                   )}
                 </div>
                 <div className="sidebar-user-info">
-                  <div className="sidebar-user-name">{session.user.displayName || session.user.username}</div>
+                  <div className="sidebar-user-name">{(session.user as any).displayName || session.user.username}</div>
                   <div className="sidebar-user-meta">@{session.user.username}</div>
                 </div>
               </>
