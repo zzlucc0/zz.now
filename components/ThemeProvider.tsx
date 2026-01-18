@@ -35,14 +35,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setMode(prev => prev === 'day' ? 'night' : 'day')
   }
 
-  // Prevent flash of unstyled content
-  if (!mounted) {
-    return <div style={{ visibility: 'hidden' }}>{children}</div>
-  }
-
+  // Always provide context, but hide content until mounted to prevent FOUC
   return (
     <ThemeContext.Provider value={{ mode, toggle }}>
-      {children}
+      <div style={{ visibility: mounted ? 'visible' : 'hidden' }}>
+        {children}
+      </div>
     </ThemeContext.Provider>
   )
 }
