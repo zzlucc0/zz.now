@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals'
-import { generateSlug, formatDate, truncateText } from '@/lib/utils/helpers'
+import { generateSlug, formatDate, truncate } from '@/lib/utils/helpers'
 
 describe('Helper Functions', () => {
   describe('generateSlug', () => {
@@ -41,21 +41,21 @@ describe('Helper Functions', () => {
     })
   })
 
-  describe('truncateText', () => {
+  describe('truncate', () => {
     it('should truncate long text', () => {
       const longText = 'a'.repeat(200)
-      const truncated = truncateText(longText, 100)
+      const truncated = truncate(longText, 100)
       expect(truncated.length).toBeLessThanOrEqual(103) // 100 + '...'
     })
 
     it('should not truncate short text', () => {
       const shortText = 'Hello World'
-      expect(truncateText(shortText, 100)).toBe(shortText)
+      expect(truncate(shortText, 100)).toBe(shortText)
     })
 
     it('should add ellipsis when truncated', () => {
       const longText = 'a'.repeat(200)
-      const truncated = truncateText(longText, 100)
+      const truncated = truncate(longText, 100)
       expect(truncated).toContain('...')
     })
   })

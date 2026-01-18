@@ -72,7 +72,8 @@ describe('Admin API', () => {
         data: {
           action: 'DELETE_POST',
           userId: adminUser.id,
-          details: { postId: testPost.id },
+          resource: 'POST',
+          resourceId: testPost.id,
         },
       })
 
