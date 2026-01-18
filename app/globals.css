@@ -499,6 +499,241 @@ a:hover {
   }
 }
 
+/* ==============================================
+   HOMEPAGE - TODAY DASHBOARD
+   ============================================== */
+
+.home-page {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.home-greeting {
+  margin-bottom: 3rem;
+}
+
+.home-greeting-text {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.home-greeting-subtitle {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+}
+
+.home-section {
+  margin-bottom: 3rem;
+}
+
+.home-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.home-section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.home-section-link {
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+  transition: color 200ms ease;
+}
+
+.home-section-link:hover {
+  color: var(--color-accent);
+}
+
+/* Feed cards */
+.home-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.home-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  transition: all 200ms ease;
+  display: block;
+}
+
+.home-card:hover {
+  background-color: var(--color-surface-hover);
+  transform: translateY(-2px);
+}
+
+.home-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.625rem;
+}
+
+.home-card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  flex: 1;
+}
+
+.home-card-time {
+  font-size: 0.8125rem;
+  color: var(--color-text-subtle);
+  flex-shrink: 0;
+}
+
+.home-card-excerpt {
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin-bottom: 0.875rem;
+}
+
+.home-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.home-card-author {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.home-card-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--color-accent-muted);
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+.home-card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-card-author-name {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.home-card-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.home-card-stat {
+  font-size: 0.8125rem;
+  color: var(--color-text-subtle);
+}
+
+/* Activity feed */
+.home-activity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.home-activity-item {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.home-activity-header {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.home-activity-author {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.home-activity-action {
+  color: var(--color-text-subtle);
+}
+
+.home-activity-post {
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.home-activity-post:hover {
+  color: var(--color-accent-hover);
+}
+
+.home-activity-preview {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* Empty state */
+.home-empty {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-muted);
+}
+
+.home-empty a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* Quick actions */
+.home-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.home-action-btn {
+  flex: 1;
+  min-width: 180px;
+  text-align: center;
+}
+
+/* CTA section */
+.home-cta {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.home-cta-text {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.25rem;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
