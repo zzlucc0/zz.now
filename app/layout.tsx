@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import { auth } from "@/lib/auth/config";
 import { Sidebar } from "@/components/Sidebar";
 import { SessionProvider } from "@/components/SessionProvider";
-import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,17 +29,26 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
           <SessionProvider session={session}>
-            <div className="app-layout">
+            <div className="app-shell">
               <Sidebar session={session} />
-              <main className="app-content">
+              <main className="main-feed">
                 {children}
               </main>
+              {/* Right panel placeholder - will add widgets later */}
+              <aside className="right-panel">
+                <div className="text-sm text-muted-foreground">Context panel</div>
+              </aside>
             </div>
           </SessionProvider>
         </ThemeProvider>
