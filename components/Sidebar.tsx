@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, FileText, Briefcase, Wrench, Settings } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import { ThemeToggle } from './ThemeToggle'
@@ -31,117 +30,92 @@ export function Sidebar({ session }: SidebarProps) {
   return (
     <aside className="sidebar">
       {/* User section */}
-      <div className="space-y-4">
-        {session ? (
-          <div className="flex items-center gap-3 group">
-            <Avatar className="h-10 w-10 transition-transform duration-200 group-hover:scale-110 ring-2 ring-transparent group-hover:ring-primary/20">
-              <AvatarFallback>
-                {((session.user as any).displayName || session.user.username || 'U')[0].toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate transition-colors group-hover:text-primary">
-                {(session.user as any).displayName || session.user.username}
-              </p>
-              <p className="text-xs text-muted-foreground truncate">
-                @{session.user.username}
-              </p>
-            </div>
+      {session ? (
+        <div className="sidebar-user">
+          <Avatar className="h-9 w-9 border border-border bg-card">
+            <AvatarFallback>
+              {((session.user as any).displayName || session.user.username || 'U')[0].toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <p className="sidebar-user-name truncate">
+              {(session.user as any).displayName || session.user.username}
+            </p>
+            <p className="sidebar-user-handle truncate">
+              @{session.user.username}
+            </p>
           </div>
-        ) : (
-          <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10">
-              <AvatarFallback>?</AvatarFallback>
-            </Avatar>
-            <div className="flex-1">
-              <p className="text-sm font-medium">Guest</p>
-            </div>
+        </div>
+      ) : (
+        <div className="sidebar-user">
+          <Avatar className="h-9 w-9 border border-border bg-card">
+            <AvatarFallback>?</AvatarFallback>
+          </Avatar>
+          <div className="flex-1">
+            <p className="sidebar-user-name">Guest</p>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      <Separator className="my-4" />
+      <Separator className="my-4 sidebar-separator" />
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1">
+      <nav className="sidebar-nav">
         {navLinks.map((link) => {
           const Icon = link.icon
           return (
-            <Button
+            <Link
               key={link.href}
-              variant={isActive(link.href) ? 'secondary' : 'ghost'}
-              className={`w-full justify-start transition-all duration-200 ${
-                isActive(link.href) 
-                  ? 'shadow-sm' 
-                  : 'hover:translate-x-1'
-              }`}
-              asChild
+              href={link.href}
+              className={`sidebar-link ${isActive(link.href) ? 'active' : ''}`}
             >
-              <Link href={link.href}>
-                <Icon className="mr-2 h-4 w-4" />
-                {link.label}
-              </Link>
-            </Button>
+              <Icon className="sidebar-link-icon h-4 w-4" />
+              {link.label}
+            </Link>
           )
         })}
 
         {session && (
           <>
-            <Separator className="my-2" />
-            <Button
-              variant={isActive('/dashboard') ? 'secondary' : 'ghost'}
-              className={`w-full justify-start transition-all duration-200 ${
-                isActive('/dashboard') 
-                  ? 'shadow-sm' 
-                  : 'hover:translate-x-1'
-              }`}
-              asChild
+            <Separator className="my-2 sidebar-separator" />
+            <Link
+              href="/dashboard"
+              className={`sidebar-link ${isActive('/dashboard') ? 'active' : ''}`}
             >
-              <Link href="/dashboard">
-                <FileText className="mr-2 h-4 w-4" />
-                Dashboard
-              </Link>
-            </Button>
-            <Button
-              variant={isActive('/editor') ? 'secondary' : 'ghost'}
-              className={`w-full justify-start transition-all duration-200 ${
-                isActive('/editor') 
-                  ? 'shadow-sm' 
-                  : 'hover:translate-x-1'
-              }`}
-              asChild
+              <FileText className="sidebar-link-icon h-4 w-4" />
+              Dashboard
+            </Link>
+            <Link
+              href="/editor/new"
+              className={`sidebar-link ${isActive('/editor') ? 'active' : ''}`}
             >
-              <Link href="/editor/new">
-                <FileText className="mr-2 h-4 w-4" />
-                Write
-              </Link>
-            </Button>
+              <FileText className="sidebar-link-icon h-4 w-4" />
+              Write
+            </Link>
           </>
         )}
 
         {!session && (
           <>
-            <Separator className="my-2" />
-            <Button
-              variant="ghost"
-              className="w-full justify-start transition-all duration-200 hover:translate-x-1"
-              asChild
-            >
-              <Link href="/login">Sign in</Link>
-            </Button>
+            <Separator className="my-2 sidebar-separator" />
+            <Link href="/login" className="sidebar-link">
+              Sign in
+            </Link>
           </>
         )}
       </nav>
 
       {/* Footer */}
-      <div className="mt-auto pt-4 border-t flex items-center justify-between">
+      <div className="sidebar-footer">
         <ThemeToggle />
         {session && (
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/settings/profile">
-              <Settings className="h-4 w-4" />
-            </Link>
-          </Button>
+          <Link
+            href="/settings/profile"
+            className="sidebar-icon-link"
+            aria-label="Settings"
+          >
+            <Settings className="h-4 w-4" />
+          </Link>
         )}
       </div>
     </aside>

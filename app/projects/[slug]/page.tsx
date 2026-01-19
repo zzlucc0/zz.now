@@ -44,49 +44,38 @@ export default async function ProjectDetailPage({
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-4xl">
-      <div className="mb-8">
-        <div className="flex items-center gap-4 mb-4">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-            {project.title}
-          </h1>
-          <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 text-sm font-medium rounded-full">
-            {project.status}
-          </span>
+    <div className="page-shell">
+      <div className="page-header">
+        <div className="flex items-center flex-wrap gap-4 mb-4">
+          <h1 className="page-title">{project.title}</h1>
+          <span className="status-pill status-pill-active">{project.status}</span>
         </div>
-        <p className="text-xl text-gray-600 dark:text-gray-300">
-          {project.description}
-        </p>
+        <p className="page-subtitle">{project.description}</p>
       </div>
 
-      <div className="prose dark:prose-invert max-w-none">
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Overview</h2>
-          <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line">
-            {project.longDescription}
-          </p>
+      <div className="prose max-w-none">
+        <section className="about-section">
+          <h2 className="about-section-title">Overview</h2>
+          <p className="about-text whitespace-pre-line">{project.longDescription}</p>
         </section>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Key Features</h2>
-          <ul className="space-y-2">
+        <section className="about-section">
+          <h2 className="about-section-title">Key Features</h2>
+          <ul className="about-list">
             {project.features.map((feature: string, index: number) => (
-              <li key={index} className="flex items-start">
-                <span className="text-blue-600 dark:text-blue-400 mr-2">✓</span>
-                <span className="text-gray-600 dark:text-gray-300">{feature}</span>
+              <li key={index} className="flex items-start gap-2">
+                <span className="text-primary">✓</span>
+                <span className="text-muted-foreground">{feature}</span>
               </li>
             ))}
           </ul>
         </section>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Technologies Used</h2>
+        <section className="about-section">
+          <h2 className="about-section-title">Technologies Used</h2>
           <div className="flex flex-wrap gap-3">
             {project.technologies.map((tech: string) => (
-              <span
-                key={tech}
-                className="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg"
-              >
+              <span key={tech} className="tag-pill">
                 {tech}
               </span>
             ))}
@@ -94,14 +83,14 @@ export default async function ProjectDetailPage({
         </section>
 
         <section>
-          <h2 className="text-2xl font-semibold mb-4">Links</h2>
-          <div className="flex gap-4">
+          <h2 className="about-section-title">Links</h2>
+          <div className="flex flex-wrap gap-4">
             {project.github && (
               <a
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3 bg-gray-900 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition"
+                className="home-action-btn btn-secondary"
               >
                 View on GitHub
               </a>
@@ -111,7 +100,7 @@ export default async function ProjectDetailPage({
                 href={project.demo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                className="home-action-btn btn-primary"
               >
                 Live Demo
               </a>

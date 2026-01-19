@@ -60,15 +60,38 @@ export default async function HomePage() {
 
   return (
     <div className="home-page">
-      {/* Greeting */}
-      <div className="home-greeting">
-        <h1 className="home-greeting-text">
-          {session ? `${greeting}, ${(session.user as any).displayName || session.user.username}` : 'Welcome'}
-        </h1>
-        <p className="home-greeting-subtitle">
-          {session ? "Here's what's been happening" : 'A quiet space for thoughts and community'}
-        </p>
-      </div>
+      <section className="home-hero">
+        <div className="home-hero-copy">
+          <p className="home-hero-eyebrow">Personal platform</p>
+          <h1 className="home-hero-title">
+            {session ? `${greeting}, ${(session.user as any).displayName || session.user.username}` : 'Welcome'}
+          </h1>
+          <p className="home-hero-subtitle">
+            {session ? "Here's what's been happening" : 'A quiet space for thoughts and community'}
+          </p>
+        </div>
+        <div className="home-hero-actions">
+          {session ? (
+            <>
+              <Link href="/editor/new" className="home-action-btn btn-primary">
+                ✎ Write a Post
+              </Link>
+              <Link href="/dashboard" className="home-action-btn btn-secondary">
+                ◈ Dashboard
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/register" className="home-action-btn btn-primary">
+                Create Account
+              </Link>
+              <Link href="/login" className="home-action-btn btn-secondary">
+                Sign In
+              </Link>
+            </>
+          )}
+        </div>
+      </section>
 
       {/* Recent Posts */}
       <section className="home-section">
@@ -81,8 +104,12 @@ export default async function HomePage() {
         
         {recentPosts.length > 0 ? (
           <div className="home-feed">
-            {recentPosts.map((post) => (
-              <Link key={post.id} href={`/posts/${post.slug}`} className="home-card fade-in">
+            {recentPosts.map((post, index) => (
+              <Link
+                key={post.id}
+                href={`/posts/${post.slug}`}
+                className={`home-card fade-in ${index === 0 ? 'home-card-featured' : ''}`}
+              >
                 <div className="home-card-header">
                   <h3 className="home-card-title">{post.title}</h3>
                   <time className="home-card-time">
@@ -153,36 +180,6 @@ export default async function HomePage() {
                 </p>
               </div>
             ))}
-          </div>
-        </section>
-      )}
-
-      {/* Quick Actions */}
-      {session && (
-        <section className="home-section">
-          <div className="home-actions">
-            <Link href="/editor/new" className="home-action-btn btn-primary">
-              ✎ Write a Post
-            </Link>
-            <Link href="/dashboard" className="home-action-btn btn-secondary">
-              ◈ Dashboard
-            </Link>
-          </div>
-        </section>
-      )}
-
-      {!session && (
-        <section className="home-section">
-          <div className="home-cta">
-            <p className="home-cta-text">Ready to join?</p>
-            <div className="home-actions">
-              <Link href="/register" className="home-action-btn btn-primary">
-                Create Account
-              </Link>
-              <Link href="/login" className="home-action-btn btn-secondary">
-                Sign In
-              </Link>
-            </div>
           </div>
         </section>
       )}

@@ -134,14 +134,14 @@ export default function ProfileSettingsPage() {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm">
-        <Link href="/dashboard" className="text-blue-600 hover:underline">
+        <Link href="/dashboard" className="text-primary hover:underline">
           Dashboard
         </Link>
-        <span className="mx-2 text-gray-400">/</span>
-        <span className="text-gray-600">Profile Settings</span>
+        <span className="mx-2 text-muted-foreground">/</span>
+        <span className="text-muted-foreground">Profile Settings</span>
       </nav>
 
-      <h1 className="text-3xl font-bold mb-6">Profile Settings</h1>
+      <h1 className="text-3xl font-semibold mb-6">Profile Settings</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Avatar */}
@@ -155,7 +155,7 @@ export default function ProfileSettingsPage() {
                 className="w-24 h-24 rounded-full object-cover"
               />
             ) : (
-              <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center">
+              <div className="w-24 h-24 rounded-full bg-muted border border-border flex items-center justify-center">
                 <span className="text-3xl font-bold">
                   {(session?.user?.name || session?.user?.email || 'U')[0].toUpperCase()}
                 </span>
@@ -163,7 +163,7 @@ export default function ProfileSettingsPage() {
             )}
 
             <div>
-              <label className="px-4 py-2 border rounded-lg hover:bg-gray-50 cursor-pointer inline-block">
+              <label className="home-action-btn btn-secondary cursor-pointer inline-block">
                 {uploading ? 'Uploading...' : 'Upload Avatar'}
                 <input
                   type="file"
@@ -173,7 +173,7 @@ export default function ProfileSettingsPage() {
                   disabled={uploading}
                 />
               </label>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 PNG, JPG or WebP. Max 5MB.
               </p>
             </div>
@@ -189,10 +189,10 @@ export default function ProfileSettingsPage() {
             type="text"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
             placeholder="Your display name..."
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             This will be shown instead of your username
           </p>
         </div>
@@ -203,30 +203,30 @@ export default function ProfileSettingsPage() {
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg resize-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-1 focus:ring-ring"
             placeholder="Tell us about yourself..."
             rows={4}
             maxLength={500}
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {bio.length}/500 characters
           </p>
         </div>
 
         {/* Account Info (Read-only) */}
-        <div className="border-t pt-6">
-          <h2 className="text-xl font-bold mb-4">Account Information</h2>
-          <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
+        <div className="border-t border-border pt-6">
+          <h2 className="text-xl font-semibold mb-4">Account Information</h2>
+          <div className="space-y-3 bg-secondary border border-border p-4 rounded-lg">
             <div>
-              <p className="text-sm text-gray-600">Username</p>
+              <p className="text-sm text-muted-foreground">Username</p>
               <p className="font-medium">{session?.user?.name}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Email</p>
+              <p className="text-sm text-muted-foreground">Email</p>
               <p className="font-medium">{session?.user?.email}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Role</p>
+              <p className="text-sm text-muted-foreground">Role</p>
               <p className="font-medium capitalize">{session?.user?.role}</p>
             </div>
           </div>
@@ -237,13 +237,13 @@ export default function ProfileSettingsPage() {
           <button
             type="submit"
             disabled={saving}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="home-action-btn btn-primary disabled:opacity-50"
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
           <Link
             href="/dashboard"
-            className="px-6 py-2 border rounded-lg hover:bg-gray-50"
+            className="home-action-btn btn-secondary"
           >
             Cancel
           </Link>

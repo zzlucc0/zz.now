@@ -84,7 +84,7 @@ export default async function DashboardPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-card p-6 rounded-lg shadow border border-border">
+        <div className="bg-card p-6 rounded-lg shadow-sm border border-border">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Total Posts</p>
@@ -94,7 +94,7 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        <div className="bg-card p-6 rounded-lg shadow border border-border">
+        <div className="bg-card p-6 rounded-lg shadow-sm border border-border">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Total Comments</p>
@@ -104,7 +104,7 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        <div className="bg-card p-6 rounded-lg shadow border border-border">
+        <div className="bg-card p-6 rounded-lg shadow-sm border border-border">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Total Reactions</p>
@@ -170,7 +170,7 @@ export default async function DashboardPage() {
             </Link>
           </div>
         ) : (
-          <div className="bg-card rounded-lg shadow overflow-hidden border border-border">
+          <div className="bg-card rounded-lg shadow-sm overflow-hidden border border-border">
             <table className="min-w-full divide-y divide-border">
               <thead className="bg-muted">
                 <tr>
@@ -216,12 +216,8 @@ export default async function DashboardPage() {
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`px-2 py-1 text-xs rounded-full ${
-                          post.status === 'PUBLISHED'
-                            ? 'bg-green-100 text-green-800'
-                            : post.status === 'DRAFT'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-gray-100 text-gray-800'
+                        className={`status-pill ${
+                          post.status === 'PUBLISHED' ? 'status-pill-active' : ''
                         }`}
                       >
                         {post.status}

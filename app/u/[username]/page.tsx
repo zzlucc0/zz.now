@@ -80,7 +80,7 @@ export default async function UserProfilePage({ params }: PageProps) {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Profile Header */}
-      <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+      <div className="page-card mb-8">
         <div className="flex items-start gap-6">
           {/* Avatar */}
           {user.avatarUrl ? (
@@ -90,7 +90,7 @@ export default async function UserProfilePage({ params }: PageProps) {
               className="w-24 h-24 rounded-full"
             />
           ) : (
-            <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center">
+            <div className="w-24 h-24 rounded-full bg-muted border border-border flex items-center justify-center">
               <span className="text-3xl font-bold">
                 {(user.displayName || user.username)[0].toUpperCase()}
               </span>
@@ -104,23 +104,23 @@ export default async function UserProfilePage({ params }: PageProps) {
                 <h1 className="text-2xl font-bold">
                   {user.displayName || user.username}
                 </h1>
-                <p className="text-gray-600">@{user.username}</p>
+                <p className="text-muted-foreground">@{user.username}</p>
               </div>
 
               {isOwnProfile && (
                 <Link
                   href="/settings/profile"
-                  className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+                  className="home-action-btn btn-secondary"
                 >
                   Edit Profile
                 </Link>
               )}
             </div>
 
-            {user.bio && <p className="text-gray-700 mb-4">{user.bio}</p>}
+            {user.bio && <p className="text-muted-foreground mb-4">{user.bio}</p>}
 
             {/* Stats */}
-            <div className="flex items-center gap-6 text-sm text-gray-600">
+            <div className="flex items-center gap-6 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
                 <strong>{user._count.posts}</strong> posts
               </span>
@@ -146,8 +146,8 @@ export default async function UserProfilePage({ params }: PageProps) {
         </h2>
 
         {posts.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-            <p className="text-gray-600">
+          <div className="text-center py-12 page-card">
+            <p className="text-muted-foreground">
               {isOwnProfile
                 ? "You haven't published any posts yet."
                 : 'This user has not published any posts yet.'}
@@ -155,7 +155,7 @@ export default async function UserProfilePage({ params }: PageProps) {
             {isOwnProfile && (
               <Link
                 href="/editor/new"
-                className="inline-block mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="home-action-btn btn-primary mt-4"
               >
                 Create Your First Post
               </Link>
@@ -166,16 +166,16 @@ export default async function UserProfilePage({ params }: PageProps) {
             {posts.map((post) => (
               <article
                 key={post.id}
-                className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
+                className="page-card"
               >
                 <Link href={`/posts/${post.slug}`}>
-                  <h3 className="text-xl font-bold mb-2 hover:text-blue-600">
+                  <h3 className="text-xl font-semibold mb-2 hover:text-primary">
                     {post.title}
                   </h3>
                 </Link>
 
                 {post.excerpt && (
-                  <p className="text-gray-600 mb-3 line-clamp-2">
+                  <p className="text-muted-foreground mb-3 line-clamp-2">
                     {post.excerpt}
                   </p>
                 )}
@@ -187,7 +187,7 @@ export default async function UserProfilePage({ params }: PageProps) {
                       <Link
                         key={tag.slug}
                         href={`/posts?tag=${tag.slug}`}
-                        className="px-2 py-1 bg-gray-100 text-xs rounded-full hover:bg-gray-200"
+                        className="tag-pill"
                       >
                         {tag.name}
                       </Link>
@@ -196,7 +196,7 @@ export default async function UserProfilePage({ params }: PageProps) {
                 )}
 
                 {/* Meta */}
-                <div className="flex items-center gap-4 text-sm text-gray-500">
+                <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <span>
                     {post.publishedAt
                       ? new Date(post.publishedAt).toLocaleDateString('en-US', {
@@ -216,7 +216,7 @@ export default async function UserProfilePage({ params }: PageProps) {
 
         {posts.length === 10 && (
           <div className="text-center mt-6">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               Showing most recent 10 posts
             </p>
           </div>

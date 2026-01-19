@@ -181,7 +181,7 @@ export default function EditPostPage({ params }: PageProps) {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold mb-6">Edit Post</h1>
+      <h1 className="text-3xl font-semibold mb-6">Edit Post</h1>
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -190,7 +190,7 @@ export default function EditPostPage({ params }: PageProps) {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
             placeholder="Enter post title..."
             required
           />
@@ -203,7 +203,7 @@ export default function EditPostPage({ params }: PageProps) {
           <textarea
             value={excerpt}
             onChange={(e) => setExcerpt(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg resize-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-1 focus:ring-ring"
             placeholder="Brief summary for post cards..."
             rows={2}
           />
@@ -216,11 +216,11 @@ export default function EditPostPage({ params }: PageProps) {
               <button
                 type="button"
                 onClick={() => setIsPreview(!isPreview)}
-                className="text-sm text-blue-600 hover:underline"
+                className="text-sm text-primary hover:underline"
               >
                 {isPreview ? 'Edit' : 'Preview'}
               </button>
-              <label className="text-sm text-blue-600 hover:underline cursor-pointer">
+              <label className="text-sm text-primary hover:underline cursor-pointer">
                 {uploading ? 'Uploading...' : 'Upload Image'}
                 <input
                   type="file"
@@ -234,20 +234,20 @@ export default function EditPostPage({ params }: PageProps) {
           </div>
 
           {isPreview ? (
-            <div className="border rounded-lg p-4 min-h-[400px] bg-white">
+            <div className="border border-border rounded-lg p-4 min-h-[400px] bg-card">
               <MarkdownRenderer content={content} />
             </div>
           ) : (
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg resize-none focus:ring-2 focus:ring-blue-500 font-mono"
+              className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-1 focus:ring-ring font-mono"
               placeholder="Write your post content... (Markdown supported)"
               rows={20}
               required
             />
           )}
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Markdown supported. Use :emoji_id: for custom emojis.
           </p>
         </div>
@@ -265,7 +265,7 @@ export default function EditPostPage({ params }: PageProps) {
                   handleAddTag()
                 }
               }}
-              className="flex-1 px-4 py-2 border rounded-lg"
+              className="flex-1 px-4 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground"
               placeholder="Add tags..."
               list="available-tags"
             />
@@ -277,7 +277,7 @@ export default function EditPostPage({ params }: PageProps) {
             <button
               type="button"
               onClick={handleAddTag}
-              className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+              className="home-action-btn btn-secondary"
             >
               Add
             </button>
@@ -287,13 +287,13 @@ export default function EditPostPage({ params }: PageProps) {
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-3 py-1 bg-gray-100 rounded-full text-sm flex items-center gap-2"
+                  className="tag-pill text-sm flex items-center gap-2"
                 >
                   {tag}
                   <button
                     type="button"
                     onClick={() => handleRemoveTag(tag)}
-                    className="text-red-600 hover:text-red-800"
+                    className="text-destructive hover:text-destructive/80"
                   >
                     ✕
                   </button>
@@ -309,7 +309,7 @@ export default function EditPostPage({ params }: PageProps) {
             <select
               value={status_}
               onChange={(e) => setStatus_(e.target.value as any)}
-              className="w-full px-4 py-2 border rounded-lg"
+              className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground"
             >
               <option value="DRAFT">Draft</option>
               <option value="PUBLISHED">Published</option>
@@ -322,7 +322,7 @@ export default function EditPostPage({ params }: PageProps) {
             <select
               value={visibility}
               onChange={(e) => setVisibility(e.target.value as any)}
-              className="w-full px-4 py-2 border rounded-lg"
+              className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground"
             >
               <option value="PUBLIC">Public</option>
               <option value="UNLISTED">Unlisted</option>
@@ -335,14 +335,14 @@ export default function EditPostPage({ params }: PageProps) {
           <button
             type="submit"
             disabled={saving}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="home-action-btn btn-primary disabled:opacity-50"
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
           <button
             type="button"
             onClick={() => router.push(`/posts/${postSlug}`)}
-            className="px-6 py-2 border rounded-lg hover:bg-gray-50"
+            className="home-action-btn btn-secondary"
           >
             Cancel
           </button>

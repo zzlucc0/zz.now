@@ -26,34 +26,42 @@ export default function ToolPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-4xl">
-      <div className="mb-8">
-        <Link
-          href="/tools"
-          className="text-blue-600 dark:text-blue-400 hover:underline mb-4 inline-block"
-        >
+    <div className="page-shell">
+      <div className="page-header">
+        <Link href="/tools" className="page-link mb-4 inline-block">
           ← Back to Tools
         </Link>
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-          {tool.name}
-        </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-300">
-          {tool.description}
-        </p>
+        <h1 className="page-title">{tool.name}</h1>
+        <p className="page-subtitle">{tool.description}</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8">
+      <div className="page-card page-card-lg">
         {slug === 'example-tool' && <ExampleTool />}
         {slug === 'calculator' && <Calculator />}
       </div>
 
-      <div className="mt-8 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-        <h2 className="text-lg font-semibold mb-2">How to Add New Tools</h2>
-        <ol className="list-decimal list-inside space-y-2 text-gray-600 dark:text-gray-300">
-          <li>Add tool metadata to <code className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">/app/tools/page.tsx</code></li>
-          <li>Add tool configuration to <code className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">/app/tools/[toolSlug]/page.tsx</code></li>
+      <div className="page-callout">
+        <h2 className="page-callout-title">How to Add New Tools</h2>
+        <ol className="list-decimal list-inside space-y-2 text-muted-foreground">
+          <li>
+            Add tool metadata to{' '}
+            <code className="bg-card border border-border px-2 py-1 rounded">
+              /app/tools/page.tsx
+            </code>
+          </li>
+          <li>
+            Add tool configuration to{' '}
+            <code className="bg-card border border-border px-2 py-1 rounded">
+              /app/tools/[toolSlug]/page.tsx
+            </code>
+          </li>
           <li>Create your tool component below</li>
-          <li>Optionally add API routes under <code className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">/app/api/tools/[toolSlug]/</code></li>
+          <li>
+            Optionally add API routes under{' '}
+            <code className="bg-card border border-border px-2 py-1 rounded">
+              /app/api/tools/[toolSlug]/
+            </code>
+          </li>
         </ol>
       </div>
     </div>
@@ -67,7 +75,7 @@ function ExampleTool() {
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Example Tool Interface</h2>
-      <p className="text-gray-600 dark:text-gray-300">
+      <p className="text-muted-foreground">
         This is a template for building tools. Replace this with your own tool logic.
       </p>
       <div>
@@ -76,12 +84,12 @@ function ExampleTool() {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
           placeholder="Enter something..."
         />
       </div>
-      <div className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-        <p className="text-sm text-gray-600 dark:text-gray-300">Output: {input}</p>
+      <div className="p-4 bg-secondary border border-border rounded-lg">
+        <p className="text-sm text-muted-foreground">Output: {input}</p>
       </div>
     </div>
   )
@@ -136,7 +144,7 @@ function Calculator() {
 
   return (
     <div className="max-w-sm mx-auto">
-      <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-right text-2xl font-mono">
+      <div className="mb-4 p-4 bg-secondary border border-border rounded-lg text-right text-2xl font-mono">
         {display}
       </div>
       <div className="grid grid-cols-4 gap-2">
@@ -144,7 +152,7 @@ function Calculator() {
           <button
             key={btn}
             onClick={() => (btn === '/' ? handleOperation(btn) : handleNumber(btn))}
-            className="p-4 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-lg font-semibold"
+            className="p-4 bg-secondary border border-border hover:bg-secondary/80 rounded-lg font-semibold transition-colors"
           >
             {btn}
           </button>
@@ -153,7 +161,7 @@ function Calculator() {
           <button
             key={btn}
             onClick={() => (btn === '*' ? handleOperation(btn) : handleNumber(btn))}
-            className="p-4 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-lg font-semibold"
+            className="p-4 bg-secondary border border-border hover:bg-secondary/80 rounded-lg font-semibold transition-colors"
           >
             {btn}
           </button>
@@ -162,7 +170,7 @@ function Calculator() {
           <button
             key={btn}
             onClick={() => (btn === '-' ? handleOperation(btn) : handleNumber(btn))}
-            className="p-4 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-lg font-semibold"
+            className="p-4 bg-secondary border border-border hover:bg-secondary/80 rounded-lg font-semibold transition-colors"
           >
             {btn}
           </button>
@@ -175,14 +183,14 @@ function Calculator() {
               else if (btn === '+') handleOperation(btn)
               else handleNumber(btn)
             }}
-            className="p-4 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-lg font-semibold"
+            className="p-4 bg-secondary border border-border hover:bg-secondary/80 rounded-lg font-semibold transition-colors"
           >
             {btn}
           </button>
         ))}
         <button
           onClick={handleClear}
-          className="col-span-4 p-4 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold"
+          className="col-span-4 p-4 bg-destructive hover:bg-destructive/90 text-destructive-foreground rounded-lg font-semibold transition-colors"
         >
           Clear
         </button>

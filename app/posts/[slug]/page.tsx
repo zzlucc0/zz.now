@@ -83,17 +83,17 @@ export default async function PostDetailPage({ params }: PageProps) {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm">
-        <Link href="/posts" className="text-blue-600 hover:underline">
+        <Link href="/posts" className="text-primary hover:underline">
           Posts
         </Link>
-        <span className="mx-2 text-gray-400">/</span>
-        <span className="text-gray-600">{post.title}</span>
+        <span className="mx-2 text-muted-foreground">/</span>
+        <span className="text-muted-foreground">{post.title}</span>
       </nav>
 
       {/* Status Badge for Drafts */}
       {post.status !== 'PUBLISHED' && (
-        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-yellow-800 text-sm">
+        <div className="mb-4 p-3 bg-secondary border border-border rounded-lg">
+          <p className="text-foreground text-sm">
             📝 This post is a <strong>{post.status.toLowerCase()}</strong> and
             only visible to you.
           </p>
@@ -114,7 +114,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                   className="w-12 h-12 rounded-full mr-3"
                 />
               ) : (
-                <div className="w-12 h-12 rounded-full bg-gray-300 mr-3 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-muted border border-border mr-3 flex items-center justify-center">
                   <span className="text-lg font-bold">
                     {(
                       post.author.displayName || post.author.username
@@ -125,11 +125,11 @@ export default async function PostDetailPage({ params }: PageProps) {
               <div>
                 <Link
                   href={`/users/${post.author.id}`}
-                  className="text-lg font-medium hover:text-blue-600"
+                  className="text-lg font-medium hover:text-primary"
                 >
                   {post.author.displayName || post.author.username}
                 </Link>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   Published{' '}
                   {post.publishedAt
                     ? new Date(post.publishedAt).toLocaleDateString('en-US', {
@@ -148,7 +148,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                 {isAuthor && (
                   <Link
                     href={`/editor/${post.id}`}
-                    className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+                    className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors"
                   >
                     Edit
                   </Link>
@@ -167,7 +167,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                 <Link
                   key={tag.id}
                   href={`/posts?tag=${tag.slug}`}
-                  className="px-3 py-1 bg-gray-100 text-sm rounded-full hover:bg-gray-200"
+                  className="tag-pill"
                 >
                   {tag.name}
                 </Link>
@@ -176,7 +176,7 @@ export default async function PostDetailPage({ params }: PageProps) {
           )}
 
           {/* Stats */}
-          <div className="flex items-center gap-4 text-sm text-gray-600">
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <span>💬 {post._count.comments} comments</span>
             <span>❤️ {post._count.reactions} reactions</span>
             <span>
@@ -186,7 +186,7 @@ export default async function PostDetailPage({ params }: PageProps) {
         </header>
 
         {/* Post Content */}
-        <div className="border-t pt-6">
+        <div className="border-t border-border pt-6">
           <MarkdownRenderer content={post.content} />
         </div>
 
@@ -196,7 +196,7 @@ export default async function PostDetailPage({ params }: PageProps) {
             <h3 className="text-xl font-bold mb-4">Attachments</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {post.media.map((media) => (
-                <div key={media.id} className="border rounded-lg overflow-hidden">
+                <div key={media.id} className="border border-border rounded-lg overflow-hidden">
                   {media.type === 'IMAGE' && media.objectKey && (
                     <img
                       src={`/api/media/${media.objectKey}`}
@@ -220,13 +220,13 @@ export default async function PostDetailPage({ params }: PageProps) {
         )}
 
         {/* Reactions */}
-        <div className="mt-8 pt-6 border-t">
+        <div className="mt-8 pt-6 border-t border-border">
           <ReactionButtons postId={post.id} reactions={post.reactions} />
         </div>
       </article>
 
       {/* Comments Section */}
-      <section className="border-t pt-8">
+      <section className="border-t border-border pt-8">
         <h2 className="text-2xl font-bold mb-6">
           Comments ({post._count.comments})
         </h2>
@@ -235,7 +235,7 @@ export default async function PostDetailPage({ params }: PageProps) {
 
       {/* Author Bio */}
       {post.author.bio && (
-        <aside className="mt-8 p-6 bg-gray-50 rounded-lg">
+        <aside className="mt-8 p-6 bg-secondary border border-border rounded-lg">
           <h3 className="text-lg font-bold mb-2">About the Author</h3>
           <div className="flex items-start gap-4">
             {post.author.avatarUrl ? (
@@ -245,7 +245,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                 className="w-16 h-16 rounded-full"
               />
             ) : (
-              <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full bg-muted border border-border flex items-center justify-center">
                 <span className="text-xl font-bold">
                   {(
                     post.author.displayName || post.author.username
@@ -256,11 +256,11 @@ export default async function PostDetailPage({ params }: PageProps) {
             <div>
               <Link
                 href={`/users/${post.author.id}`}
-                className="text-lg font-medium hover:text-blue-600"
+                className="text-lg font-medium hover:text-primary"
               >
                 {post.author.displayName || post.author.username}
               </Link>
-              <p className="text-gray-600 mt-1">{post.author.bio}</p>
+              <p className="text-muted-foreground mt-1">{post.author.bio}</p>
             </div>
           </div>
         </aside>

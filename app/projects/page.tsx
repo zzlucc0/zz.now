@@ -28,57 +28,49 @@ const projects = [
 
 export default function ProjectsPage() {
   return (
-    <div className="container mx-auto px-4 py-12 max-w-6xl">
-      <div className="mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Projects
-        </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-300">
+    <div className="page-shell">
+      <div className="page-header">
+        <h1 className="page-title">Projects</h1>
+        <p className="page-subtitle">
           A collection of projects I've worked on. Each project showcases different
           technologies and approaches to solving problems.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="page-grid page-grid-2">
         {projects.map((project) => (
-          <div
+          <article
             key={project.slug}
-            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-lg transition"
+            className="page-card"
           >
-            <div className="flex items-start justify-between mb-4">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                {project.title}
-              </h2>
+            <div className="page-card-header">
+              <h2 className="page-card-title">{project.title}</h2>
               <span
-                className={`px-3 py-1 text-xs font-medium rounded-full ${
-                  project.status === 'Active'
-                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                    : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+                className={`status-pill ${
+                  project.status === 'Active' ? 'status-pill-active' : 'status-pill-complete'
                 }`}
               >
                 {project.status}
               </span>
             </div>
 
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
-              {project.description}
-            </p>
+            <p className="page-card-description">{project.description}</p>
 
-            <div className="flex flex-wrap gap-2 mb-4">
+            <div className="page-card-tags">
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-sm text-gray-700 dark:text-gray-300 rounded"
+                  className="page-card-tag"
                 >
                   {tag}
                 </span>
               ))}
             </div>
 
-            <div className="flex gap-4">
+            <div className="page-card-links">
               <Link
                 href={`/projects/${project.slug}`}
-                className="text-blue-600 dark:text-blue-400 hover:underline"
+                className="page-link"
               >
                 View Details →
               </Link>
@@ -87,13 +79,13 @@ export default function ProjectsPage() {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-600 dark:text-gray-400 hover:underline"
+                  className="page-link"
                 >
                   GitHub →
                 </a>
               )}
             </div>
-          </div>
+          </article>
         ))}
       </div>
     </div>

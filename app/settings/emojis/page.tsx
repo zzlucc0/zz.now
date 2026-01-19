@@ -173,23 +173,23 @@ export default function EmojiSettingsPage() {
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm">
-        <Link href="/dashboard" className="text-blue-600 hover:underline">
+        <Link href="/dashboard" className="text-primary hover:underline">
           Dashboard
         </Link>
-        <span className="mx-2 text-gray-400">/</span>
-        <span className="text-gray-600">Emoji Management</span>
+        <span className="mx-2 text-muted-foreground">/</span>
+        <span className="text-muted-foreground">Emoji Management</span>
       </nav>
 
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Custom Emojis</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-semibold mb-2">Custom Emojis</h1>
+          <p className="text-muted-foreground">
             Upload and manage your custom emojis. Use them in posts and comments
             with :emoji_id: syntax.
           </p>
         </div>
 
-        <label className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer">
+        <label className="home-action-btn btn-primary cursor-pointer">
           {uploading ? 'Uploading...' : '+ Upload Emoji'}
           <input
             type="file"
@@ -202,12 +202,13 @@ export default function EmojiSettingsPage() {
       </div>
 
       {/* Info Box */}
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <h3 className="font-medium text-blue-900 mb-2">How to use:</h3>
-        <ul className="text-sm text-blue-800 space-y-1">
+      <div className="mb-6 p-4 bg-secondary border border-border rounded-lg">
+        <h3 className="font-medium text-foreground mb-2">How to use:</h3>
+        <ul className="text-sm text-muted-foreground space-y-1">
           <li>• Upload emoji images (PNG, JPG, WebP, GIF - max 5MB)</li>
           <li>
-            • Use in posts/comments: <code className="bg-blue-100 px-1 rounded">:emoji_id:</code>
+            • Use in posts/comments:{' '}
+            <code className="bg-card border border-border px-1 rounded">:emoji_id:</code>
           </li>
           <li>• Add keywords to make emojis searchable</li>
           <li>• Each emoji must have a unique name</li>
@@ -216,11 +217,11 @@ export default function EmojiSettingsPage() {
 
       {/* Emoji Grid */}
       {emojis.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-600 text-lg mb-4">
+        <div className="text-center py-12 bg-secondary border border-border rounded-lg">
+          <p className="text-muted-foreground text-lg mb-4">
             You don't have any custom emojis yet
           </p>
-          <label className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer">
+          <label className="home-action-btn btn-primary cursor-pointer">
             Upload Your First Emoji
             <input
               type="file"
@@ -236,7 +237,7 @@ export default function EmojiSettingsPage() {
           {emojis.map((emoji) => (
             <div
               key={emoji.id}
-              className="bg-white border rounded-lg p-4 hover:shadow transition-shadow"
+              className="page-card"
             >
               {editingId === emoji.id ? (
                 // Edit Mode
@@ -251,7 +252,7 @@ export default function EmojiSettingsPage() {
                       type="text"
                       value={editName}
                       onChange={(e) => setEditName(e.target.value)}
-                      className="flex-1 px-2 py-1 border rounded text-sm"
+                      className="flex-1 px-2 py-1 border border-border rounded text-sm bg-background text-foreground placeholder:text-muted-foreground"
                       placeholder="Name"
                     />
                   </div>
@@ -259,19 +260,19 @@ export default function EmojiSettingsPage() {
                     type="text"
                     value={editKeywords}
                     onChange={(e) => setEditKeywords(e.target.value)}
-                    className="w-full px-2 py-1 border rounded text-sm mb-3"
+                    className="w-full px-2 py-1 border border-border rounded text-sm bg-background text-foreground placeholder:text-muted-foreground mb-3"
                     placeholder="Keywords (comma-separated)"
                   />
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleSaveEdit(emoji.id)}
-                      className="flex-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                      className="flex-1 px-3 py-1 bg-primary text-primary-foreground text-sm rounded-lg hover:bg-primary/90 transition-colors"
                     >
                       Save
                     </button>
                     <button
                       onClick={() => setEditingId(null)}
-                      className="flex-1 px-3 py-1 border text-sm rounded hover:bg-gray-50"
+                      className="flex-1 px-3 py-1 border border-border text-sm rounded-lg hover:bg-secondary transition-colors"
                     >
                       Cancel
                     </button>
@@ -289,7 +290,7 @@ export default function EmojiSettingsPage() {
                       />
                       <div>
                         <p className="font-medium">{emoji.name}</p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-muted-foreground">
                           :{emoji.id.slice(-8)}:
                         </p>
                       </div>
@@ -297,7 +298,7 @@ export default function EmojiSettingsPage() {
                   </div>
 
                   {emoji.keywords && (
-                    <p className="text-sm text-gray-600 mb-3">
+                    <p className="text-sm text-muted-foreground mb-3">
                       🏷️ {emoji.keywords}
                     </p>
                   )}
@@ -305,19 +306,19 @@ export default function EmojiSettingsPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleEdit(emoji)}
-                      className="flex-1 px-3 py-1 text-sm border rounded hover:bg-gray-50"
+                      className="flex-1 px-3 py-1 text-sm border border-border rounded-lg hover:bg-secondary transition-colors"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(emoji.id, emoji.name)}
-                      className="flex-1 px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+                      className="flex-1 px-3 py-1 text-sm bg-destructive text-destructive-foreground rounded-lg hover:bg-destructive/90 transition-colors"
                     >
                       Delete
                     </button>
                   </div>
 
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="text-xs text-muted-foreground mt-2">
                     Added {new Date(emoji.createdAt).toLocaleDateString()}
                   </p>
                 </div>
