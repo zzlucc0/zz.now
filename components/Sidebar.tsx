@@ -33,14 +33,14 @@ export function Sidebar({ session }: SidebarProps) {
       {/* User section */}
       <div className="space-y-4">
         {session ? (
-          <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10">
+          <div className="flex items-center gap-3 group">
+            <Avatar className="h-10 w-10 transition-transform duration-200 group-hover:scale-110 ring-2 ring-transparent group-hover:ring-primary/20">
               <AvatarFallback>
                 {((session.user as any).displayName || session.user.username || 'U')[0].toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">
+              <p className="text-sm font-medium truncate transition-colors group-hover:text-primary">
                 {(session.user as any).displayName || session.user.username}
               </p>
               <p className="text-xs text-muted-foreground truncate">
@@ -70,7 +70,11 @@ export function Sidebar({ session }: SidebarProps) {
             <Button
               key={link.href}
               variant={isActive(link.href) ? 'secondary' : 'ghost'}
-              className="w-full justify-start"
+              className={`w-full justify-start transition-all duration-200 ${
+                isActive(link.href) 
+                  ? 'shadow-sm' 
+                  : 'hover:translate-x-1'
+              }`}
               asChild
             >
               <Link href={link.href}>
@@ -86,7 +90,11 @@ export function Sidebar({ session }: SidebarProps) {
             <Separator className="my-2" />
             <Button
               variant={isActive('/dashboard') ? 'secondary' : 'ghost'}
-              className="w-full justify-start"
+              className={`w-full justify-start transition-all duration-200 ${
+                isActive('/dashboard') 
+                  ? 'shadow-sm' 
+                  : 'hover:translate-x-1'
+              }`}
               asChild
             >
               <Link href="/dashboard">
@@ -96,7 +104,11 @@ export function Sidebar({ session }: SidebarProps) {
             </Button>
             <Button
               variant={isActive('/editor') ? 'secondary' : 'ghost'}
-              className="w-full justify-start"
+              className={`w-full justify-start transition-all duration-200 ${
+                isActive('/editor') 
+                  ? 'shadow-sm' 
+                  : 'hover:translate-x-1'
+              }`}
               asChild
             >
               <Link href="/editor/new">
@@ -112,7 +124,7 @@ export function Sidebar({ session }: SidebarProps) {
             <Separator className="my-2" />
             <Button
               variant="ghost"
-              className="w-full justify-start"
+              className="w-full justify-start transition-all duration-200 hover:translate-x-1"
               asChild
             >
               <Link href="/login">Sign in</Link>

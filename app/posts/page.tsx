@@ -87,10 +87,11 @@ async function getPosts(params: SearchParams) {
 export default async function PostsPage({
   searchParams,
 }: {
-  searchParams: SearchParams
+  searchParams: Promise<SearchParams>
 }) {
-  const { posts, page, totalPages, tags } = await getPosts(searchParams)
-  const selectedTag = searchParams.tag
+  const params = await searchParams
+  const { posts, page, totalPages, tags } = await getPosts(params)
+  const selectedTag = params.tag
 
   return (
     <div className="posts-page">

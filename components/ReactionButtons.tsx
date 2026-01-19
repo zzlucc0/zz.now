@@ -80,7 +80,7 @@ export default function ReactionButtons({
   }
 
   return (
-    <div className="reaction-buttons">
+    <div className="reaction-buttons flex items-center gap-2">
       {Object.entries(reactionEmojis).map(([type, emoji]) => {
         const count = reactionCounts[type] || 0
         const hasReacted = userReactions.includes(type)
@@ -90,11 +90,15 @@ export default function ReactionButtons({
             key={type}
             onClick={() => handleReaction(type)}
             disabled={loading || !session}
-            className={`reaction-btn ${hasReacted ? 'reaction-btn-active' : ''} ${loading ? 'reaction-btn-loading' : ''}`}
+            className={`reaction-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all duration-200 hover:scale-110 active:scale-95 ${
+              hasReacted 
+                ? 'bg-primary/10 border-primary text-primary shadow-sm animate-[bounce_0.3s_ease-out]' 
+                : 'bg-background border-border hover:border-primary/50 hover:bg-primary/5'
+            } ${loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} disabled:opacity-40 disabled:cursor-not-allowed`}
             title={!session ? 'Login to react' : `React with ${emoji}`}
           >
-            <span className="reaction-emoji">{emoji}</span>
-            {count > 0 && <span className="reaction-count">{count}</span>}
+            <span className="reaction-emoji text-base leading-none">{emoji}</span>
+            {count > 0 && <span className="reaction-count text-sm font-medium">{count}</span>}
           </button>
         )
       })}
