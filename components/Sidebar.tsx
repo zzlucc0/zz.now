@@ -2,9 +2,11 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, FileText, Briefcase, Wrench, Settings } from 'lucide-react'
+import { Home, FileText, Briefcase, Wrench, Settings, LogOut } from 'lucide-react'
+import { signOut } from 'next-auth/react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
 import { ThemeToggle } from './ThemeToggle'
 import type { Session } from 'next-auth'
 
@@ -108,15 +110,27 @@ export function Sidebar({ session }: SidebarProps) {
       {/* Footer */}
       <div className="sidebar-footer">
         <ThemeToggle />
-        {session && (
-          <Link
-            href="/settings/profile"
-            className="sidebar-icon-link"
-            aria-label="Settings"
-          >
-            <Settings className="h-4 w-4" />
-          </Link>
-        )}
+        {session ? (
+          <div className="flex items-center gap-2">
+            <Link
+              href="/settings/profile"
+              className="sidebar-icon-link"
+              aria-label="Settings"
+            >
+              <Settings className="h-4 w-4" />
+            </Link>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="gap-1"
+              onClick={() => signOut({ callbackUrl: '/' })}
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </Button>
+          </div>
+        ) : null}
       </div>
     </aside>
   )

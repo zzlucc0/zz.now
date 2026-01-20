@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import MarkdownRenderer from '@/components/MarkdownRenderer'
+import { RichMarkdownEditor } from '@/components/editor/RichMarkdownEditor'
 
 export default function NewPostPage() {
   const router = useRouter()
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [excerpt, setExcerpt] = useState('')
@@ -15,9 +15,7 @@ export default function NewPostPage() {
   const [tagInput, setTagInput] = useState('')
   const [status_, setStatus_] = useState<'DRAFT' | 'PUBLISHED'>('DRAFT')
   const [visibility, setVisibility] = useState<'PUBLIC' | 'UNLISTED' | 'PRIVATE'>('PUBLIC')
-  const [isPreview, setIsPreview] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [uploading, setUploading] = useState(false)
   const [availableTags, setAvailableTags] = useState<Array<{ id: string; name: string; slug: string }>>([])
 
   useEffect(() => {
@@ -34,65 +32,55 @@ export default function NewPostPage() {
       .catch(console.error)
   }, [])
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+  const handleMediaUpload = async (file: File, kind: 'image' | 'video') => {
+    const purpose = kind === 'image' ? 'POST_IMAGE' : 'POST_VIDEO'
 
-    setUploading(true)
-    try {
-      // 1. Request presigned URL
-      const presignRes = await fetch('/api/media/presign', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          purpose: 'POST_IMAGE',
-          filename: file.name,
-          mimeType: file.type,
-          size: file.size,
-        }),
-      })
+    const presignRes = await fetch('/api/media/presign', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        purpose,
+        filename: file.name,
+        mimeType: file.type,
+        size: file.size,
+      }),
+    })
 
-      if (!presignRes.ok) {
-        const error = await presignRes.json()
-        throw new Error(error.error || 'Failed to get upload URL')
-      }
-
-      const { uploadUrl, publicUrl, objectKey } = await presignRes.json()
-
-      // 2. Upload to MinIO
-      const uploadRes = await fetch(uploadUrl, {
-        method: 'PUT',
-        body: file,
-        headers: {
-          'Content-Type': file.type,
-        },
-      })
-
-      if (!uploadRes.ok) {
-        throw new Error('Failed to upload file')
-      }
-
-      // 3. Confirm upload
-      const confirmRes = await fetch('/api/media/confirm', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          objectKey,
-          purpose: 'POST_IMAGE',
-        }),
-      })
-
-      if (!confirmRes.ok) {
-        throw new Error('Failed to confirm upload')
-      }
-
-      // Insert markdown image syntax at cursor
-      setContent((prev) => prev + `\n\n![Image](${publicUrl})\n\n`)
-    } catch (error) {
-      alert(error instanceof Error ? error.message : 'Upload failed')
-    } finally {
-      setUploading(false)
+    if (!presignRes.ok) {
+      const error = await presignRes.json()
+      throw new Error(error.error || 'Failed to get upload URL')
     }
+
+    const { uploadUrl, objectKey } = await presignRes.json()
+
+    const uploadRes = await fetch(uploadUrl, {
+      method: 'PUT',
+      body: file,
+      headers: {
+        'Content-Type': file.type,
+      },
+    })
+
+    if (!uploadRes.ok) {
+      throw new Error('Failed to upload file')
+    }
+
+    const confirmRes = await fetch('/api/media/confirm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        objectKey,
+        purpose,
+      }),
+    })
+
+    if (!confirmRes.ok) {
+      const error = await confirmRes.json()
+      throw new Error(error.error || 'Failed to confirm upload')
+    }
+
+    const data = await confirmRes.json()
+    return data.url || data.publicUrl
   }
 
   const handleAddTag = () => {
@@ -186,46 +174,12 @@ export default function NewPostPage() {
 
         {/* Content Editor */}
         <div className="mb-4">
-          <div className="flex items-center justify-between mb-2">
-            <label className="block text-sm font-medium">Content</label>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setIsPreview(!isPreview)}
-                className="text-sm text-primary hover:underline"
-              >
-                {isPreview ? 'Edit' : 'Preview'}
-              </button>
-              <label className="text-sm text-primary hover:underline cursor-pointer">
-                {uploading ? 'Uploading...' : 'Upload Image'}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                  disabled={uploading}
-                />
-              </label>
-            </div>
-          </div>
-
-          {isPreview ? (
-            <div className="border border-border rounded-lg p-4 min-h-[400px] bg-card">
-              <MarkdownRenderer content={content} />
-            </div>
-          ) : (
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-1 focus:ring-ring font-mono"
-              placeholder="Write your post content... (Markdown supported)"
-              rows={20}
-              required
-            />
-          )}
-          <p className="text-xs text-muted-foreground mt-1">
-            Markdown supported. Use :emoji_id: for custom emojis.
-          </p>
+          <label className="block text-sm font-medium mb-2">Content</label>
+          <RichMarkdownEditor
+            value={content}
+            onChange={setContent}
+            onUploadMedia={handleMediaUpload}
+          />
         </div>
 
         {/* Tags */}

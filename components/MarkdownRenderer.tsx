@@ -41,6 +41,9 @@ export default function MarkdownRenderer({
       'tr',
       'th',
       'td',
+      'video',
+      'source',
+      'iframe',
     ]),
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
@@ -48,6 +51,9 @@ export default function MarkdownRenderer({
       a: ['href', 'target', 'rel'],
       code: ['class'],
       pre: ['class'],
+      video: ['src', 'controls', 'poster', 'width', 'height', 'class', 'muted', 'loop', 'playsinline'],
+      source: ['src', 'type'],
+      iframe: ['src', 'title', 'allow', 'allowfullscreen', 'width', 'height', 'frameborder', 'loading', 'class'],
     },
     allowedSchemes: ['http', 'https', 'mailto'],
   })
@@ -159,6 +165,26 @@ export default function MarkdownRenderer({
               loading="lazy"
               {...props}
             />
+          ),
+
+          video: ({ node, ...props }) => (
+            <div className="my-4 overflow-hidden rounded-xl bg-black/70">
+              <video
+                controls
+                className="post-video w-full"
+                {...props}
+              />
+            </div>
+          ),
+
+          iframe: ({ node, ...props }) => (
+            <div className="my-6 overflow-hidden rounded-xl bg-black/80">
+              <iframe
+                className="post-iframe h-[360px] w-full"
+                loading="lazy"
+                {...props}
+              />
+            </div>
           ),
 
           // Paragraphs
