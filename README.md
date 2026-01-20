@@ -69,8 +69,11 @@ This will start:
 
 ### 4. Set up environment variables
 
-The `.env` file is already configured for local development.
-Update `NEXTAUTH_SECRET` for production use.
+Copy `.env.example` to `.env` and fill in the values. Keep this file local-only (it's gitignored). At minimum you need:
+
+- Database connection details (`DATABASE_URL`)
+- `NEXTAUTH_SECRET` (generate a unique value)
+- Local admin bootstrap secrets (`ADMIN_BOOTSTRAP_USERNAME`, `ADMIN_BOOTSTRAP_EMAIL`, `ADMIN_BOOTSTRAP_PASSWORD` — used only when seeding an admin account)
 
 ### 5. Run database migrations
 
@@ -84,6 +87,14 @@ npx prisma generate
 ```bash
 npx prisma db seed
 ```
+
+To create an initial admin account for local testing, set the `ADMIN_BOOTSTRAP_*` variables in your `.env` and run:
+
+```bash
+npx tsx scripts/create-admin.ts
+```
+
+The script reads credentials from your environment and never prints the raw password. Remove or rotate the bootstrap values after the admin account is created.
 
 ### 7. Start the development server
 
