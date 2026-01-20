@@ -66,18 +66,18 @@ export default function MarkdownRenderer({
         remarkPlugins={[remarkGfm]}
         components={{
           // Custom heading styles
-          h1: ({ node, ...props }) => (
+          h1: (props) => (
             <h1 className="text-4xl font-bold mb-4 mt-8" {...props} />
           ),
-          h2: ({ node, ...props }) => (
+          h2: (props) => (
             <h2 className="text-3xl font-bold mb-3 mt-6" {...props} />
           ),
-          h3: ({ node, ...props }) => (
+          h3: (props) => (
             <h3 className="text-2xl font-bold mb-2 mt-4" {...props} />
           ),
 
           // Code blocks
-          code: ({ node, className, children, ...props }) => {
+          code: ({ className, children, ...props }) => {
             const match = /language-(\w+)/.exec(className || '')
             const isInline = !match
 
@@ -102,7 +102,7 @@ export default function MarkdownRenderer({
           },
 
           // Links with target blank for external
-          a: ({ node, href, children, ...props }) => {
+          a: ({ href, children, ...props }) => {
             const isExternal = href?.startsWith('http')
             return (
               <a
@@ -118,7 +118,7 @@ export default function MarkdownRenderer({
           },
 
           // Blockquotes
-          blockquote: ({ node, ...props }) => (
+          blockquote: (props) => (
             <blockquote
               className="border-l-4 border-gray-300 pl-4 italic text-gray-700 my-4"
               {...props}
@@ -126,7 +126,7 @@ export default function MarkdownRenderer({
           ),
 
           // Tables
-          table: ({ node, ...props }) => (
+          table: (props) => (
             <div className="overflow-x-auto my-4">
               <table
                 className="min-w-full divide-y divide-gray-200 border"
@@ -134,40 +134,41 @@ export default function MarkdownRenderer({
               />
             </div>
           ),
-          th: ({ node, ...props }) => (
+          th: (props) => (
             <th
               className="px-4 py-2 bg-gray-100 text-left font-semibold"
               {...props}
             />
           ),
-          td: ({ node, ...props }) => (
+          td: (props) => (
             <td className="px-4 py-2 border-t" {...props} />
           ),
 
           // Lists
-          ul: ({ node, ...props }) => (
+          ul: (props) => (
             <ul className="list-disc list-inside my-4 space-y-2" {...props} />
           ),
-          ol: ({ node, ...props }) => (
+          ol: (props) => (
             <ol
               className="list-decimal list-inside my-4 space-y-2"
               {...props}
             />
           ),
-          li: ({ node, ...props }) => (
+          li: (props) => (
             <li className="text-gray-800" {...props} />
           ),
 
           // Images
-          img: ({ node, ...props }) => (
+          img: ({ alt, ...props }) => (
             <img
+              alt={alt ?? ''}
               className="rounded-lg max-w-full h-auto my-4"
               loading="lazy"
               {...props}
             />
           ),
 
-          video: ({ node, ...props }) => (
+          video: (props) => (
             <div className="my-4 overflow-hidden rounded-xl bg-black/70">
               <video
                 controls
@@ -177,18 +178,19 @@ export default function MarkdownRenderer({
             </div>
           ),
 
-          iframe: ({ node, ...props }) => (
+          iframe: ({ title, ...props }) => (
             <div className="my-6 overflow-hidden rounded-xl bg-black/80">
               <iframe
                 className="post-iframe h-[360px] w-full"
                 loading="lazy"
+                title={title || 'Embedded content'}
                 {...props}
               />
             </div>
           ),
 
           // Paragraphs
-          p: ({ node, ...props }) => (
+          p: (props) => (
             <p className="mb-4 text-gray-800 leading-relaxed" {...props} />
           ),
         }}

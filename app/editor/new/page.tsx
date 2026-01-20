@@ -240,7 +240,9 @@ export default function NewPostPage() {
             <label className="block text-sm font-medium mb-2">Status</label>
             <select
               value={status_}
-              onChange={(e) => setStatus_(e.target.value as any)}
+              onChange={(e) =>
+                setStatus_(e.target.value as 'DRAFT' | 'PUBLISHED')
+              }
               className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground"
             >
               <option value="DRAFT">Draft</option>
@@ -253,7 +255,11 @@ export default function NewPostPage() {
             </label>
             <select
               value={visibility}
-              onChange={(e) => setVisibility(e.target.value as any)}
+              onChange={(e) =>
+                setVisibility(
+                  e.target.value as 'PUBLIC' | 'UNLISTED' | 'PRIVATE'
+                )
+              }
               className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground"
             >
               <option value="PUBLIC">Public</option>

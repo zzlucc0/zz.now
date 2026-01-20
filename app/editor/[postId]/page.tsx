@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { RichMarkdownEditor } from '@/components/editor/RichMarkdownEditor'
@@ -24,26 +24,8 @@ export default function EditPostPage({ params }: PageProps) {
   const [availableTags, setAvailableTags] = useState<Array<{ id: string; name: string; slug: string }>>([])
   const [postSlug, setPostSlug] = useState('')
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login')
-      return
-    }
-
-    if (status === 'authenticated') {
-      loadPost()
-    }
-  }, [status, params.postId])
-
-  useEffect(() => {
-    // Fetch available tags
-    fetch('/api/tags')
-      .then((res) => res.json())
-      .then((data) => setAvailableTags(data.tags || []))
-      .catch(console.error)
-  }, [])
-
-  const loadPost = async () => {
+  const loadPost = useCallback(async () => {
+    setLoading(true)
     try {
       const res = await fetch(`/api/posts/${params.postId}`)
       if (!res.ok) {
@@ -61,7 +43,7 @@ export default function EditPostPage({ params }: PageProps) {
       setTitle(post.title)
       setContent(post.content)
       setExcerpt(post.excerpt || '')
-      setTags(post.tags.map((t: any) => t.name))
+      setTags(post.tags.map((t: { name: string }) => t.name))
       setStatus_(post.status)
       setVisibility(post.visibility)
       setPostSlug(post.slug)
@@ -72,7 +54,27 @@ export default function EditPostPage({ params }: PageProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [params.postId, router])
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login')
+      return
+    }
+
+    if (status === 'authenticated') {
+      loadPost()
+    }
+  }, [status, router, loadPost])
+
+  useEffect(() => {
+    // Fetch available tags
+    fetch('/api/tags')
+      .then((res) => res.json())
+      .then((data) => setAvailableTags(data.tags || []))
+      .catch(console.error)
+  }, [])
+
 
   const handleMediaUpload = async (file: File, kind: 'image' | 'video') => {
     const purpose = kind === 'image' ? 'POST_IMAGE' : 'POST_VIDEO'
@@ -266,7 +268,9 @@ export default function EditPostPage({ params }: PageProps) {
             <label className="block text-sm font-medium mb-2">Status</label>
             <select
               value={status_}
-              onChange={(e) => setStatus_(e.target.value as any)}
+              onChange={(e) =>
+                setStatus_(e.target.value as 'DRAFT' | 'PUBLISHED')
+              }
               className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground"
             >
               <option value="DRAFT">Draft</option>
@@ -279,7 +283,11 @@ export default function EditPostPage({ params }: PageProps) {
             </label>
             <select
               value={visibility}
-              onChange={(e) => setVisibility(e.target.value as any)}
+              onChange={(e) =>
+                setVisibility(
+                  e.target.value as 'PUBLIC' | 'UNLISTED' | 'PRIVATE'
+                )
+              }
               className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground"
             >
               <option value="PUBLIC">Public</option>
