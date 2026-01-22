@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, FileText, Briefcase, Wrench, Settings, LogOut } from 'lucide-react'
+import { Home, FileText, Briefcase, Wrench, Settings, LogOut, Linkedin, Instagram, Github } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
@@ -27,6 +27,24 @@ export function Sidebar({ session }: SidebarProps) {
     { href: '/posts', label: 'Posts', icon: FileText },
     { href: '/projects', label: 'Projects', icon: Briefcase },
     { href: '/tools', label: 'Tools', icon: Wrench },
+  ]
+
+  const socialLinks = [
+    {
+      href: 'https://www.linkedin.com/in/zzlucc0',
+      label: 'LinkedIn profile',
+      icon: Linkedin,
+    },
+    {
+      href: 'https://www.instagram.com/zzlucc0',
+      label: 'Instagram profile',
+      icon: Instagram,
+    },
+    {
+      href: 'https://github.com/zzlucc0',
+      label: 'GitHub profile',
+      icon: Github,
+    },
   ]
 
   return (
@@ -109,7 +127,23 @@ export function Sidebar({ session }: SidebarProps) {
 
       {/* Footer */}
       <div className="sidebar-footer">
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <div className="flex items-center gap-1.5" aria-label="Social links">
+            {socialLinks.map(({ href, label, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="sidebar-icon-link"
+                aria-label={label}
+              >
+                <Icon className="h-4 w-4" />
+              </Link>
+            ))}
+          </div>
+        </div>
         {session ? (
           <div className="flex items-center gap-2">
             <Link
