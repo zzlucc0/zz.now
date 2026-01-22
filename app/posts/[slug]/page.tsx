@@ -6,6 +6,7 @@ import MarkdownRenderer from '@/components/MarkdownRenderer'
 import CommentSection from '@/components/CommentSection'
 import ReactionButtons from '@/components/ReactionButtons'
 import { DeletePostButton } from '@/components/DeletePostButton'
+import { AudioPlayer } from '@/components/AudioPlayer'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -79,8 +80,23 @@ export default async function PostDetailPage({ params }: PageProps) {
   const isAuthor = session?.user?.id === post.authorId
   const isAdmin = session?.user?.role === 'ADMIN'
 
+  // Separate background music from other media
+  const backgroundMusic = post.media.find((m) => m.type === 'AUDIO' && m.isBackgroundMusic)
+  const otherMedia = post.media.filter((m) => !(m.type === 'AUDIO' && m.isBackgroundMusic))
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Background Music Player */}
+      {backgroundMusic && backgroundMusic.objectKey && (
+        <div className="mb-6">
+          <AudioPlayer
+            src={`/api/media/${backgroundMusic.objectKey}`}
+            title="Background Music"
+            autoPlay={true}
+          />
+        </div>
+      )}
+
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm">
         <Link href="/posts" className="text-primary hover:underline">
@@ -176,27 +192,34 @@ export default async function PostDetailPage({ params }: PageProps) {
           )}
 
           {/* Stats */}
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span>💬 {post._count.comments} comments</span>
-            <span>❤️ {post._count.reactions} reactions</span>
-            <span>
-              📖 {Math.ceil(post.content.split(' ').length / 200)} min read
-            </span>
-          </div>
-        </header>
-
-        {/* Post Content */}
-        <div className="border-t border-border pt-6">
-          <MarkdownRenderer content={post.content} />
-        </div>
-
-        {/* Media Attachments */}
-        {post.media.length > 0 && (
+         otherMedia.length > 0 && (
           <div className="mt-8">
             <h3 className="text-xl font-bold mb-4">Attachments</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {post.media.map((media) => (
+              {otherMedia.map((media) => (
                 <div key={media.id} className="border border-border rounded-lg overflow-hidden">
+                  {media.type === 'IMAGE' && media.objectKey && (
+                    <img
+                      src={`/api/media/${media.objectKey}`}
+                      alt="Post media"
+                      className="w-full h-auto"
+                    />
+                  )}
+                  {media.type === 'VIDEO_EMBED' && media.embedUrl && (
+                    <div className="aspect-video">
+                      <iframe
+                        src={media.embedUrl}
+                        className="w-full h-full"
+                        allowFullScreen
+                      />
+                    </div>
+                  )}
+                  {media.type === 'AUDIO' && media.objectKey && (
+                    <AudioPlayer
+                      src={`/api/media/${media.objectKey}`}
+                      title="Audio Attachment"
+                      autoPlay={false}
+                    /{media.id} className="border border-border rounded-lg overflow-hidden">
                   {media.type === 'IMAGE' && media.objectKey && (
                     <img
                       src={`/api/media/${media.objectKey}`}

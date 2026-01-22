@@ -6,8 +6,9 @@ import { z } from 'zod'
 
 const confirmSchema = z.object({
   objectKey: z.string(),
-  purpose: z.enum(['POST_IMAGE', 'POST_VIDEO', 'AVATAR', 'EMOJI']),
+  purpose: z.enum(['POST_IMAGE', 'POST_VIDEO', 'POST_AUDIO', 'AVATAR', 'EMOJI']),
   postId: z.string().cuid().optional(),
+  isBackgroundMusic: z.boolean().optional(),
   emojiName: z.string().optional(),
   emojiKeywords: z.string().optional(),
 })
@@ -110,6 +111,33 @@ export async function POST(request: NextRequest) {
             postId: validated.postId,
             type: 'VIDEO_FILE',
             objectKey: validated.objectKey,
+          },
+        })
+
+        return NextResponse.json({
+          success: true,
+          media: {
+            id: media.id,
+            url: publicUrl,
+          },
+        })
+      }
+
+      return NextResponse.json({
+        success: true,
+        objectKey: validated.objectKey,
+        url: publicUrl,
+      })
+    }
+
+    if (validated.purpose === 'POST_AUDIO') {
+      if (validated.postId) {
+        const media = await prisma.postMedia.create({
+          data: {
+            postId: validated.postId,
+            type: 'AUDIO',
+            objectKey: validated.objectKey,
+            isBackgroundMusic: validated.isBackgroundMusic ?? false,
           },
         })
 

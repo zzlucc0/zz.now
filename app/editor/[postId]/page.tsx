@@ -76,8 +76,8 @@ export default function EditPostPage({ params }: PageProps) {
   }, [])
 
 
-  const handleMediaUpload = async (file: File, kind: 'image' | 'video') => {
-    const purpose = kind === 'image' ? 'POST_IMAGE' : 'POST_VIDEO'
+  const handleMediaUpload = async (file: File, kind: 'image' | 'video' | 'audio') => {
+    const purpose = kind === 'image' ? 'POST_IMAGE' : kind === 'video' ? 'POST_VIDEO' : 'POST_AUDIO'
 
     const presignRes = await fetch('/api/media/presign', {
       method: 'POST',

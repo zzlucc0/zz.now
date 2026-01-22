@@ -4,7 +4,7 @@ import { getPresignedUploadUrl } from '@/lib/storage/minio'
 import { z } from 'zod'
 
 const presignSchema = z.object({
-  purpose: z.enum(['POST_IMAGE', 'POST_VIDEO', 'AVATAR', 'EMOJI']),
+  purpose: z.enum(['POST_IMAGE', 'POST_VIDEO', 'POST_AUDIO', 'AVATAR', 'EMOJI']),
   filename: z.string().min(1).max(255),
   mimeType: z.string(),
   size: z.number().positive(),
@@ -14,6 +14,7 @@ const presignSchema = z.object({
 const ALLOWED_MIMES = {
   POST_IMAGE: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/gif'],
   POST_VIDEO: ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-matroska'],
+  POST_AUDIO: ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg', 'audio/aac', 'audio/m4a', 'audio/webm'],
   AVATAR: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'],
   EMOJI: ['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/gif'],
 }
@@ -22,6 +23,7 @@ const ALLOWED_MIMES = {
 const SIZE_LIMITS = {
   POST_IMAGE: 10 * 1024 * 1024, // 10MB
   POST_VIDEO: 150 * 1024 * 1024, // 150MB
+  POST_AUDIO: 25 * 1024 * 1024, // 25MB
   AVATAR: 5 * 1024 * 1024, // 5MB
   EMOJI: 5 * 1024 * 1024, // 5MB
 }

@@ -1101,3 +1101,47 @@ html {
   .main-feed { padding: 2.25rem 1rem 3rem; }
   .posts-pagination { flex-wrap: wrap; gap: 0.75rem; }
 }
+/* Audio Player Styles */
+.audio-progress-slider,
+.audio-volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: hsl(var(--muted));
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.audio-progress-slider::-webkit-slider-thumb,
+.audio-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: hsl(var(--primary));
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.audio-progress-slider::-moz-range-thumb,
+.audio-volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: hsl(var(--primary));
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.audio-progress-slider:hover::-webkit-slider-thumb,
+.audio-volume-slider:hover::-webkit-slider-thumb {
+  transform: scale(1.2);
+}
+
+.audio-progress-slider:hover::-moz-range-thumb,
+.audio-volume-slider:hover::-moz-range-thumb {
+  transform: scale(1.2);
+}

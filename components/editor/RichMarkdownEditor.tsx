@@ -16,13 +16,14 @@ import {
   Minus,
   Image as ImageIcon,
   Video,
+  Music,
   Eye,
   EyeOff,
   Type,
 } from 'lucide-react'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 
-type UploadKind = 'image' | 'video'
+type UploadKind = 'image' | 'video' | 'audio'
 
 interface RichMarkdownEditorProps {
   value: string
@@ -43,6 +44,7 @@ export function RichMarkdownEditor({
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const imageInputRef = useRef<HTMLInputElement>(null)
   const videoInputRef = useRef<HTMLInputElement>(null)
+  const audioInputRef = useRef<HTMLInputElement>(null)
   const [mode, setMode] = useState<'edit' | 'preview'>('edit')
   const [uploadingKind, setUploadingKind] = useState<UploadKind | null>(null)
 
@@ -154,9 +156,12 @@ export function RichMarkdownEditor({
 
       if (kind === 'image') {
         insertBlock(`\n\n![${file.name}](${url})\n\n`)
-      } else {
+      } else if (kind === 'video') {
         const videoBlock = `\n\n<video controls class="post-video">\n  <source src="${url}" type="${file.type}" />\n  Your browser does not support the video tag.\n</video>\n\n`
         insertBlock(videoBlock)
+      } else if (kind === 'audio') {
+        const audioBlock = `\n\n<audio controls class="post-audio">\n  <source src="${url}" type="${file.type}" />\n  Your browser does not support the audio tag.\n</audio>\n\n`
+        insertBlock(audioBlock)
       }
     } catch (error) {
       console.error('Media upload failed:', error)
@@ -165,6 +170,7 @@ export function RichMarkdownEditor({
       setUploadingKind(null)
       if (imageInputRef.current) imageInputRef.current.value = ''
       if (videoInputRef.current) videoInputRef.current.value = ''
+      if (audioInputRef.current) audioInputRef.current.value = ''
     }
   }
 
@@ -264,6 +270,14 @@ export function RichMarkdownEditor({
           >
             {uploadingKind === 'video' ? 'Uploading video...' : 'Upload Video'}
           </button>
+          <button
+            type="button"
+            className="home-action-btn btn-secondary"
+            onClick={() => audioInputRef.current?.click()}
+            disabled={!onUploadMedia || uploadingKind === 'audio'}
+          >
+            {uploadingKind === 'audio' ? 'Uploading audio...' : 'Upload Audio'}
+          </button>
           <input
             ref={imageInputRef}
             type="file"
@@ -277,6 +291,13 @@ export function RichMarkdownEditor({
             accept="video/*"
             className="hidden"
             onChange={(event) => handleFileUpload('video', event.target.files?.[0] ?? null)}
+          />
+          <input
+            ref={audioInputRef}
+            type="file"
+            accept="audio/*"
+            className="hidden"
+            onChange={(event) => handleFileUpload('audio', event.target.files?.[0] ?? null)}
           />
         </div>
       </div>
