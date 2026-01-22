@@ -109,25 +109,25 @@ export function Sidebar({ session }: SidebarProps) {
 
       {/* Footer */}
       <div className="sidebar-footer">
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <div className="flex items-center gap-1.5" aria-label="Social links">
-            {socialLinks.map(({ href, label, icon: Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="sidebar-icon-link"
-                aria-label={label}
-              >
-                <Icon className="h-4 w-4" />
-              </Link>
-            ))}
-          </div>
-        </div>
+        <ThemeToggle />
         {session ? (
-         ThemeToggle / Logout
+          <div className="flex items-center gap-2">
+            <Link
+              href="/settings/profile"
+              className="sidebar-icon-link"
+              aria-label="Settings"
+            >
+              <Settings className="h-4 w-4" />
+            </Link>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="gap-1"
+              onClick={() => signOut({ callbackUrl: '/' })}
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
             </Button>
           </div>
         ) : null}
