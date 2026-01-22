@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, FileText, Briefcase, Wrench, Settings, LogOut, Linkedin, Instagram, Github } from 'lucide-react'
+import { Home, FileText, Briefcase, Wrench, Settings, LogOut } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
@@ -27,24 +27,6 @@ export function Sidebar({ session }: SidebarProps) {
     { href: '/posts', label: 'Posts', icon: FileText },
     { href: '/projects', label: 'Projects', icon: Briefcase },
     { href: '/tools', label: 'Tools', icon: Wrench },
-  ]
-
-  const socialLinks = [
-    {
-      href: 'https://www.linkedin.com/in/zzlucc0',
-      label: 'LinkedIn profile',
-      icon: Linkedin,
-    },
-    {
-      href: 'https://www.instagram.com/zzlucc0',
-      label: 'Instagram profile',
-      icon: Instagram,
-    },
-    {
-      href: 'https://github.com/zzlucc0',
-      label: 'GitHub profile',
-      icon: Github,
-    },
   ]
 
   return (
@@ -145,23 +127,7 @@ export function Sidebar({ session }: SidebarProps) {
           </div>
         </div>
         {session ? (
-          <div className="flex items-center gap-2">
-            <Link
-              href="/settings/profile"
-              className="sidebar-icon-link"
-              aria-label="Settings"
-            >
-              <Settings className="h-4 w-4" />
-            </Link>
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              className="gap-1"
-              onClick={() => signOut({ callbackUrl: '/' })}
-            >
-              <LogOut className="h-4 w-4" />
-              Logout
+         ThemeToggle / Logout
             </Button>
           </div>
         ) : null}
