@@ -219,22 +219,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                       src={`/api/media/${media.objectKey}`}
                       title="Audio Attachment"
                       autoPlay={false}
-                    /{media.id} className="border border-border rounded-lg overflow-hidden">
-                  {media.type === 'IMAGE' && media.objectKey && (
-                    <img
-                      src={`/api/media/${media.objectKey}`}
-                      alt="Post media"
-                      className="w-full h-auto"
                     />
-                  )}
-                  {media.type === 'VIDEO_EMBED' && media.embedUrl && (
-                    <div className="aspect-video">
-                      <iframe
-                        src={media.embedUrl}
-                        className="w-full h-full"
-                        allowFullScreen
-                      />
-                    </div>
                   )}
                 </div>
               ))}
