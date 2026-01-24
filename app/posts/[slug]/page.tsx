@@ -192,7 +192,7 @@ export default async function PostDetailPage({ params }: PageProps) {
           )}
 
           {/* Stats */}
-         otherMedia.length > 0 && (
+         {otherMedia.length > 0 && (
           <div className="mt-8">
             <h3 className="text-xl font-bold mb-4">Attachments</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
