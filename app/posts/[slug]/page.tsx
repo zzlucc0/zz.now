@@ -190,9 +190,15 @@ export default async function PostDetailPage({ params }: PageProps) {
               ))}
             </div>
           )}
+        </header>
 
-          {/* Stats */}
-         {otherMedia.length > 0 && (
+        {/* Post Content */}
+        <div className="prose prose-lg max-w-none mb-8">
+          <MarkdownRenderer content={post.content} />
+        </div>
+
+        {/* Attachments */}
+        {otherMedia.length > 0 && (
           <div className="mt-8">
             <h3 className="text-xl font-bold mb-4">Attachments</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
