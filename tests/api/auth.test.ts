@@ -69,7 +69,7 @@ describe('Authentication API', () => {
       await createTestUser({
         username: 'duplicate',
         email: 'dup1@example.com',
-        password: 'Password123!',
+        password: process.env.TEST_USER_PASSWORD,
       })
 
       const response = await fetch('http://localhost:3000/api/auth/register', {
@@ -78,7 +78,7 @@ describe('Authentication API', () => {
         body: JSON.stringify({
           username: 'duplicate',
           email: 'dup2@example.com',
-          password: 'Password123!',
+          password: process.env.TEST_USER_PASSWORD,
         }),
       })
 
@@ -94,7 +94,7 @@ describe('Authentication API', () => {
         body: JSON.stringify({
           username: 'another',
           email: 'dup1@example.com', // Already used
-          password: 'Password123!',
+          password: process.env.TEST_USER_PASSWORD,
         }),
       })
 

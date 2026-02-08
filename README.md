@@ -60,7 +60,7 @@ npm install
 ### 3. Start Docker services
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 This will start:
@@ -69,7 +69,7 @@ This will start:
 
 ### 4. Set up environment variables
 
-Copy `.env.example` to `.env` and fill in the values. Keep this file local-only (it's gitignored). At minimum you need:
+Copy `.env.example` to `.env.local` and fill in the values. Keep this file local-only (it's gitignored). At minimum you need:
 
 - Database connection details (`DATABASE_URL`)
 - `NEXTAUTH_SECRET` (generate a unique value)
@@ -107,8 +107,8 @@ The application will be available at http://localhost:3000
 ### 8. Access MinIO Console
 
 Visit http://localhost:9001 and login with:
-- Username: `minioadmin`
-- Password: `minioadmin`
+- Username: `${MINIO_ROOT_USER}`
+- Password: `${MINIO_ROOT_PASSWORD}`
 
 ## 📜 Available Scripts
 

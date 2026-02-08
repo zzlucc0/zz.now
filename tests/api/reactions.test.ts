@@ -10,7 +10,7 @@ describe('Reactions API', () => {
     testUser = await createTestUser({
       username: 'reactor',
       email: 'reactor@example.com',
-      password: 'Password123!',
+      password: process.env.TEST_USER_PASSWORD,
     })
     testPost = await createTestPost(testUser.id, {
       title: 'Post to React',

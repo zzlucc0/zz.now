@@ -172,7 +172,7 @@ curl -X POST http://localhost:3000/api/auth/register \
   -d '{
     "username": "testuser",
     "email": "test@example.com",
-    "password": "password123",
+    "password": "${TEST_USER_PASSWORD}",
     "displayName": "Test User"
   }'
 
@@ -185,7 +185,7 @@ curl http://localhost:3000/api/posts
 ### PostgreSQL
 - Port: 5432
 - Username: postgres
-- Password: postgres
+- Password: ${POSTGRES_PASSWORD}
 - Database: personal_platform
 
 ```bash
@@ -199,8 +199,8 @@ docker-compose logs postgres
 ### MinIO
 - API Port: 9000
 - Console Port: 9001
-- Access Key: minioadmin
-- Secret Key: minioadmin
+- Access Key: ${MINIO_ROOT_USER}
+- Secret Key: ${MINIO_ROOT_PASSWORD}
 
 ```bash
 # View logs

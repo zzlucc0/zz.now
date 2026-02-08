@@ -135,7 +135,7 @@ Authorization and security testing checklist for the Personal Platform.
 # Register
 curl -X POST http://localhost:3000/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"username":"testuser","email":"test@example.com","password":"password123"}'
+  -d '{"username":"testuser","email":"test@example.com","password":"'"${TEST_USER_PASSWORD}"'"}'
 
 # Should return: {"user":{"id":"...","username":"testuser",...}}
 ```

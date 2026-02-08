@@ -160,7 +160,7 @@ Tests use isolated database: `personal_platform_test`
 docker exec -i personal-platform-postgres psql -U postgres -c "CREATE DATABASE personal_platform_test;"
 
 # Run migrations
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/personal_platform_test" \
+DATABASE_URL="${DATABASE_URL}" \
   npx prisma migrate deploy
 ```
 

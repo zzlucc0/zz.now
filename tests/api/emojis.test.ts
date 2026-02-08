@@ -9,7 +9,7 @@ describe('Emojis API', () => {
     adminUser = await createTestUser({
       username: 'emojiadmin',
       email: 'emojiadmin@example.com',
-      password: 'Password123!',
+      password: process.env.TEST_ADMIN_PASSWORD,
       role: 'ADMIN',
     })
   })

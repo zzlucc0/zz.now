@@ -2,7 +2,7 @@ services:
   web:
     build: .
     container_name: zznow_web
-    env_file: .env
+    env_file: .env.local
     depends_on:
       - db
       - minio
@@ -13,9 +13,11 @@ services:
   db:
     image: postgres:16
     container_name: zznow_db
+    env_file:
+      - .env.local
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: personal_platform
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
@@ -26,9 +28,11 @@ services:
     image: minio/minio:latest
     container_name: zznow_minio
     command: server /data --console-address ":9001"
+    env_file:
+      - .env.local
     environment:
-      MINIO_ROOT_USER: "zzlubtu"
-      MINIO_ROOT_PASSWORD: "Zz,541886"
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     ports:
       - "9000:9000"
       - "9001:9001"

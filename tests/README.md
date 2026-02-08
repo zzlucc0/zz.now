@@ -64,7 +64,7 @@ Tests use a separate test database to avoid affecting development data:
 docker exec -i personal-platform-postgres psql -U postgres -c "CREATE DATABASE personal_platform_test;"
 
 # Run migrations
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/personal_platform_test" npx prisma migrate deploy
+DATABASE_URL="${DATABASE_URL}" npx prisma migrate deploy
 ```
 
 ## Test Coverage Goals
@@ -91,7 +91,7 @@ describe('New Feature API', () => {
     testUser = await createTestUser({
       username: 'testuser',
       email: 'test@example.com',
-      password: 'Password123!',
+      password: process.env.TEST_USER_PASSWORD,
     })
   })
 

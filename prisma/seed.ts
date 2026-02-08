@@ -1,3 +1,5 @@
+declare const process: { env: Record<string, string | undefined>; exit: (code?: number) => never };
+
 import { PrismaClient } from '@prisma/client'
 import { hashPassword } from '../lib/auth/password'
 
@@ -7,11 +9,17 @@ async function main() {
   console.log('🌱 Starting database seed...')
 
   // Get admin emails from environment
-  const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim().toLowerCase()) || []
+  const adminEmails = process.env.ADMIN_EMAILS?.split(',').map((e: string) => e.trim().toLowerCase()) || []
+
+  const seedAdminPassword = process.env.SEED_ADMIN_PASSWORD
+  const seedSamplePassword = process.env.SEED_SAMPLE_PASSWORD
 
   if (adminEmails.length === 0) {
     console.log('⚠️  No ADMIN_EMAILS configured. Skipping admin user creation.')
   } else {
+    if (!seedAdminPassword) {
+      throw new Error('SEED_ADMIN_PASSWORD is required when ADMIN_EMAILS is set')
+    }
     console.log(`📧 Admin emails configured: ${adminEmails.join(', ')}`)
 
     // Create admin users
@@ -33,7 +41,7 @@ async function main() {
         }
       } else {
         const username = email.split('@')[0]
-        const passwordHash = await hashPassword('changeme123') // Default password
+        const passwordHash = await hashPassword(seedAdminPassword)
 
         const user = await prisma.user.create({
           data: {
@@ -47,7 +55,7 @@ async function main() {
 
         console.log(`✓ Created admin user: ${email}`)
         console.log(`  → Username: ${user.username}`)
-        console.log(`  → Default password: changeme123`)
+        console.log(`  → Default password set via SEED_ADMIN_PASSWORD`)
         console.log(`  ⚠️  CHANGE PASSWORD AFTER FIRST LOGIN!`)
       }
     }
@@ -71,29 +79,37 @@ async function main() {
 
   // Create a sample user (non-admin)
   console.log('\n👤 Creating sample user...')
-  const sampleUserEmail = 'user@example.com'
-  const sampleUser = await prisma.user.upsert({
-    where: { email: sampleUserEmail },
-    update: {},
-    create: {
-      email: sampleUserEmail,
-      username: 'demo_user',
-      passwordHash: await hashPassword('demo123'),
-      displayName: 'Demo User',
-      role: 'USER',
-    },
-  })
-  console.log(`✓ Sample user: ${sampleUserEmail} (password: demo123)`)
+  let sampleUserId: string | null = null
 
-  // Create a sample post
-  console.log('\n📝 Creating sample post...')
-  const welcomePost = await prisma.post.upsert({
-    where: { slug: 'welcome-to-personal-platform' },
-    update: {},
-    create: {
-      title: 'Welcome to Personal Platform!',
-      slug: 'welcome-to-personal-platform',
-      content: `# Welcome!
+  if (seedSamplePassword) {
+    const sampleUserEmail = 'user@example.com'
+    const sampleUser = await prisma.user.upsert({
+      where: { email: sampleUserEmail },
+      update: {},
+      create: {
+        email: sampleUserEmail,
+        username: 'demo_user',
+        passwordHash: await hashPassword(seedSamplePassword),
+        displayName: 'Demo User',
+        role: 'USER',
+      },
+    })
+    sampleUserId = sampleUser.id
+    console.log(`✓ Sample user: ${sampleUserEmail} (password set via SEED_SAMPLE_PASSWORD)`)
+  } else {
+    console.log('⚠️  SEED_SAMPLE_PASSWORD not set. Skipping sample user creation.')
+  }
+
+  if (sampleUserId) {
+    // Create a sample post
+    console.log('\n📝 Creating sample post...')
+    const welcomePost = await prisma.post.upsert({
+      where: { slug: 'welcome-to-personal-platform' },
+      update: {},
+      create: {
+        title: 'Welcome to Personal Platform!',
+        slug: 'welcome-to-personal-platform',
+        content: `# Welcome!
 
 This is your new personal platform. Here's what you can do:
 
@@ -126,17 +142,20 @@ Feel free to explore and enjoy!`,
       excerpt: 'Welcome to your new personal platform! Explore features and get started.',
       status: 'PUBLISHED',
       visibility: 'PUBLIC',
-      publishedAt: new Date(),
-      authorId: sampleUser.id,
-      tags: {
-        connect: [
-          { slug: 'announcement' },
-          { slug: 'guide' },
-        ],
+        publishedAt: new Date(),
+        authorId: sampleUserId,
+        tags: {
+          connect: [
+            { slug: 'announcement' },
+            { slug: 'guide' },
+          ],
+        },
       },
-    },
-  })
-  console.log(`✓ Sample post created: ${welcomePost.title}`)
+    })
+    console.log(`✓ Sample post created: ${welcomePost.title}`)
+  } else {
+    console.log('⚠️  Sample post skipped (no sample user).')
+  }
 
   console.log('\n✨ Seed completed successfully!')
 }

@@ -5,9 +5,11 @@ services:
     image: postgres:16-alpine
     container_name: personal-platform-postgres
     restart: unless-stopped
+    env_file:
+      - .env.local
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: personal_platform
     ports:
       - "5432:5432"
@@ -24,9 +26,11 @@ services:
     container_name: personal-platform-minio
     restart: unless-stopped
     command: server /data --console-address ":9001"
+    env_file:
+      - .env.local
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     ports:
       - "127.0.0.1:9000:9000"
       - "127.0.0.1:9001:9001"

@@ -73,7 +73,7 @@ export default async function RootLayout({
                       <span className="group-hover:underline">GitHub</span>
                     </a>
                     <a
-                      href="https://www.linkedin.com/in/zzlucc0"
+                      href="https://www.linkedin.com/in/zhang-zhang-36b627310/"
                       target="_blank"
                       rel="noreferrer noopener"
                       className="flex items-center gap-2.5 text-sm hover:text-primary transition-colors group"

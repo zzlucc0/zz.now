@@ -142,8 +142,8 @@ nano .env.production
 
 ```env
 # Database
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=<strong-password-here>
+POSTGRES_USER=<POSTGRES_USER>
+POSTGRES_PASSWORD=<POSTGRES_PASSWORD>
 POSTGRES_DB=personal_platform
 
 # NextAuth
@@ -151,11 +151,11 @@ NEXTAUTH_URL=https://yourdomain.com
 NEXTAUTH_SECRET=<generate-with-openssl-rand-base64-32>
 
 # Admin Users
-ADMIN_EMAILS=your-email@example.com
+ADMIN_EMAILS=<ADMIN_EMAILS_COMMA_SEPARATED>
 
 # MinIO
-MINIO_ROOT_USER=minioadmin
-MINIO_ROOT_PASSWORD=<strong-password-here>
+MINIO_ROOT_USER=<MINIO_ROOT_USER>
+MINIO_ROOT_PASSWORD=<MINIO_ROOT_PASSWORD>
 MINIO_BUCKET=personal-platform
 
 # Public URLs
@@ -248,8 +248,8 @@ docker compose up -d
 
 1. Access NPM admin panel: `http://your-server-ip:81`
 2. Default login:
-   - Email: `admin@example.com`
-   - Password: `changeme`
+  - Email: `<ADMIN_EMAILS_COMMA_SEPARATED>`
+  - Password: `<ADMIN_PASSWORD>`
 3. Change password immediately
 4. Add Proxy Host:
    - Domain Names: `yourdomain.com`

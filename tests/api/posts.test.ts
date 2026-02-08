@@ -12,12 +12,12 @@ describe('Posts API', () => {
     testUser = await createTestUser({
       username: 'postuser',
       email: 'postuser@example.com',
-      password: 'Password123!',
+      password: process.env.TEST_USER_PASSWORD,
     })
     adminUser = await createTestUser({
       username: 'admin',
       email: 'admin@example.com',
-      password: 'Admin123!',
+      password: process.env.TEST_ADMIN_PASSWORD,
       role: 'ADMIN',
     })
   })

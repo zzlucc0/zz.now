@@ -1,9 +1,15 @@
 import { jest } from '@jest/globals'
 
+const requiredEnv = ['DATABASE_URL', 'NEXTAUTH_SECRET', 'TEST_USER_PASSWORD', 'TEST_ADMIN_PASSWORD']
+
+for (const key of requiredEnv) {
+  if (!process.env[key]) {
+    throw new Error(`${key} is required for tests`) 
+  }
+}
+
 // Set test environment variables
-process.env.DATABASE_URL = 'postgresql://postgres:postgres@localhost:5432/personal_platform_test'
-process.env.NEXTAUTH_SECRET = 'test-secret-key-for-testing-only'
-process.env.NEXTAUTH_URL = 'http://localhost:3000'
+process.env.NEXTAUTH_URL = process.env.NEXTAUTH_URL || 'http://localhost:3000'
 
 // Mock NextAuth for tests
 jest.mock('next-auth/react', () => ({
