@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, FileText, Briefcase, Wrench, Settings, LogOut } from 'lucide-react'
@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from './ThemeToggle'
+import { useSidebar } from './SidebarContext'
 import type { Session } from 'next-auth'
 
 interface SidebarProps {
@@ -17,7 +18,7 @@ interface SidebarProps {
 
 export function Sidebar({ session }: SidebarProps) {
   const pathname = usePathname()
-  const [isOpen, setIsOpen] = useState(false)
+  const { isOpen, setIsOpen } = useSidebar()
 
   useEffect(() => {
     setIsOpen(false)
@@ -37,15 +38,6 @@ export function Sidebar({ session }: SidebarProps) {
 
   return (
     <>
-      <button
-        type="button"
-        className="sidebar-toggle"
-        aria-label={isOpen ? 'Close menu' : 'Open menu'}
-        aria-expanded={isOpen}
-        onClick={() => setIsOpen((open) => !open)}
-      >
-        <span aria-hidden>☰</span>
-      </button>
       <div
         className={`sidebar-backdrop ${isOpen ? 'is-open' : ''}`}
         onClick={() => setIsOpen(false)}

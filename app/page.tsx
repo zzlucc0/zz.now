@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { auth } from '@/lib/auth/config'
 import { prisma } from '@/lib/db/prisma'
 import { ClientGreeting } from '@/components/ClientGreeting'
+import { SidebarToggle } from '@/components/SidebarToggle'
 
 async function getRecentPosts() {
   return prisma.post.findMany({
@@ -61,16 +62,19 @@ export default async function HomePage() {
       <section className="home-hero">
         <div className="home-hero-copy">
           <p className="home-hero-eyebrow">Personal platform</p>
-          <h1 className="home-hero-title">
-            {session ? (
-              <ClientGreeting user={{
-                displayName: (session.user as any).displayName,
-                username: session.user.username,
-              }} />
-            ) : (
-              'Welcome'
-            )}
-          </h1>
+          <div className="home-hero-title-row">
+            <SidebarToggle className="home-hero-toggle" />
+            <h1 className="home-hero-title">
+              {session ? (
+                <ClientGreeting user={{
+                  displayName: (session.user as any).displayName,
+                  username: session.user.username,
+                }} />
+              ) : (
+                'Welcome'
+              )}
+            </h1>
+          </div>
           <p className="home-hero-subtitle">
             {session ? "Here's what's been happening" : 'A quiet space for thoughts and community'}
           </p>
