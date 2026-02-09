@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, FileText, Briefcase, Wrench, Settings, LogOut } from 'lucide-react'
@@ -16,6 +17,11 @@ interface SidebarProps {
 
 export function Sidebar({ session }: SidebarProps) {
   const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    setIsOpen(false)
+  }, [pathname])
 
   const isActive = (path: string) => {
     if (path === '/') return pathname === '/'
@@ -30,7 +36,21 @@ export function Sidebar({ session }: SidebarProps) {
   ]
 
   return (
-    <aside className="sidebar">
+    <>
+      <button
+        type="button"
+        className="sidebar-toggle"
+        aria-label={isOpen ? 'Close menu' : 'Open menu'}
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen((open) => !open)}
+      >
+        <span aria-hidden>☰</span>
+      </button>
+      <div
+        className={`sidebar-backdrop ${isOpen ? 'is-open' : ''}`}
+        onClick={() => setIsOpen(false)}
+      />
+      <aside className="sidebar" data-open={isOpen}>
       {/* User section */}
       {session ? (
         <div className="sidebar-user">
@@ -132,6 +152,7 @@ export function Sidebar({ session }: SidebarProps) {
           </div>
         ) : null}
       </div>
-    </aside>
+      </aside>
+    </>
   )
 }
