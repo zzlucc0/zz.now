@@ -18,7 +18,11 @@ export function SidebarToggle({ className }: SidebarToggleProps) {
       aria-expanded={isOpen}
       onClick={toggle}
     >
-      <span aria-hidden>☰</span>
+      <span className="sidebar-toggle-lines" aria-hidden>
+        <span className="sidebar-toggle-line" />
+        <span className="sidebar-toggle-line" />
+        <span className="sidebar-toggle-line" />
+      </span>
     </button>
   )
 }

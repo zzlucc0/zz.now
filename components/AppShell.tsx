@@ -3,7 +3,6 @@
 import type { Session } from 'next-auth'
 import { Sidebar } from '@/components/Sidebar'
 import { SidebarProvider, useSidebar } from '@/components/SidebarContext'
-import { SidebarToggle } from '@/components/SidebarToggle'
 
 interface AppShellProps {
   session: Session | null
@@ -17,9 +16,6 @@ function Shell({ session, children }: AppShellProps) {
     <div className="app-shell" data-sidebar-open={isOpen ? 'true' : 'false'}>
       <Sidebar session={session} />
       <main className="main-feed">
-        <div className="main-feed-toggle">
-          <SidebarToggle className="page-toggle" />
-        </div>
         {children}
       </main>
       <aside className="right-panel">
