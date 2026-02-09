@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { auth } from '@/lib/auth/config'
 import { prisma } from '@/lib/db/prisma'
+import { ClientGreeting } from '@/components/ClientGreeting'
 
 async function getRecentPosts() {
   return prisma.post.findMany({
@@ -55,16 +56,20 @@ export default async function HomePage() {
   const recentPosts = await getRecentPosts()
   const recentActivity = await getRecentActivity()
   
-  const now = new Date()
-  const greeting = now.getHours() < 12 ? 'Good morning' : now.getHours() < 18 ? 'Good afternoon' : 'Good evening'
-
   return (
     <div className="home-page">
       <section className="home-hero">
         <div className="home-hero-copy">
           <p className="home-hero-eyebrow">Personal platform</p>
           <h1 className="home-hero-title">
-            {session ? `${greeting}, ${(session.user as any).displayName || session.user.username}` : 'Welcome'}
+            {session ? (
+              <ClientGreeting user={{
+                displayName: (session.user as any).displayName,
+                username: session.user.username,
+              }} />
+            ) : (
+              'Welcome'
+            )}
           </h1>
           <p className="home-hero-subtitle">
             {session ? "Here's what's been happening" : 'A quiet space for thoughts and community'}
